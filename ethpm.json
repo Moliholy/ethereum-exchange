@@ -1,0 +1,13 @@
+{
+  "manifest_version": 1,
+  "package_name": "ethereum-exchange",
+  "version": "0.1.0",
+  "authors": [
+    "Jose Molina <jmolinacolmenero@gmail.com"
+  ],
+  "sources": [
+    "./contracts"
+  ],
+  "dependencies": {
+  }
+}
