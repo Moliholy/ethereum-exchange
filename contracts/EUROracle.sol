@@ -1,5 +1,6 @@
 pragma solidity ^0.5.0;
-import "github.com/oraclize/ethereum-api/oraclizeAPI_0.5.sol";
+
+import "./UsingOraclize.sol";
 
 
 contract EUROracle is usingOraclize {
@@ -11,9 +12,7 @@ contract EUROracle is usingOraclize {
     constructor()
       public
       payable
-    {
-        update();
-    }
+    {}
 
     function __callback(bytes32 _id, string memory _result)
       public
@@ -40,6 +39,7 @@ contract EUROracle is usingOraclize {
       view
       returns (uint)
     {
+        require(ETHEUR > 0);
         return ETHEUR;
     }
     
@@ -51,6 +51,7 @@ contract EUROracle is usingOraclize {
       view
       returns (uint)
     {
+        require(ETHEUR > 0);
         return 1 ether / ETHEUR;
     }
 }
