@@ -3,5 +3,5 @@ const EUROracle = artifacts.require("EUROracle");
 
 module.exports = function (deployer) {
     deployer.deploy(Exchange);
-    deployer.deploy(EUROracle, {value: 0.05e18});
+    deployer.deploy(EUROracle);
 };
