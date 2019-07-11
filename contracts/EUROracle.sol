@@ -2,7 +2,11 @@ pragma solidity ^0.5.0;
 
 import "./UsingOraclize.sol";
 
-
+/** 
+ *  @title Oracle to get ETH->EUR and EUR->ETH rates
+ *  @author José Molina Colmenero
+ *  @notice Rates are not guaranteed to be up to date
+ */
 contract EUROracle is usingOraclize {
     uint public ETHEUR;
     bytes32 public lastCallId;
@@ -29,7 +33,12 @@ contract EUROracle is usingOraclize {
         // update();  // first time it's for free!
         logFundsReceived();
     }
-
+    
+    /**
+     * @notice Callback function to be invoked by Provable in order to set the ETH->EUR exchange rate
+     * @param _id ID of the last request to Provable
+     * @param _result ETH->EUR exchange rate as a string
+     */
     function __callback(bytes32 _id, string memory _result)
       public
     {
@@ -39,6 +48,10 @@ contract EUROracle is usingOraclize {
         emit RateUpdated(ETHEUR);
     }
     
+    /**
+     * @notice Log the amount sent to the contract, if any
+     * @dev this function must be private as it's used internally only
+     */
     function logFundsReceived()
       private
     {
@@ -47,6 +60,11 @@ contract EUROracle is usingOraclize {
         }
     }
 
+    /**
+     * @notice Trigger the query to Provable to get the ETH->EUR exchange rate
+     * @dev It is possible to refill the contract along with this invokation
+     * @dev Careful: this function consumes a lot of gas
+     */
     function update()
       public
       payable
@@ -57,7 +75,8 @@ contract EUROracle is usingOraclize {
     }
 
     /**
-     * Returns 1 ETH in EUR cents
+     * @notice Returns 1 ETH in EUR cents
+     * @return the number of euros (in cents) worth one ether
      */
     function EUR()
       public
@@ -68,7 +87,8 @@ contract EUROracle is usingOraclize {
     }
     
     /**
-     * Returns 1 EUR in WEI
+     * @notice Returns 1 EUR in WEI
+     * @return the number of weis worth one euro
      */
     function WEI()
       public
@@ -78,6 +98,11 @@ contract EUROracle is usingOraclize {
         return 1 ether / ETHEUR;
     }
     
+    /**
+     * @notice Manually set the query in case the service is off
+     * @param _query string that represents URL and operations to perform in order to get the exchange rate
+     * @dev owner-restricted operation
+     */
     function setQuery(string memory _query)
       public
       onlyOwner
@@ -86,7 +111,8 @@ contract EUROracle is usingOraclize {
     }
     
     /**
-     * To manually set the price in case services are down.
+     * @notice To manually set the price in case services are down
+     * @param _ETHEUR The ETH->EUR rate to be manually set
      */
     function setETHEUR(uint _ETHEUR)
       public
@@ -95,7 +121,9 @@ contract EUROracle is usingOraclize {
         ETHEUR = _ETHEUR;
     }
       
-
+    /**
+     * @notice Used to refill the oracle by sending ether
+     */
     function()
       external
       payable
