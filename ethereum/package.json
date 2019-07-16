@@ -1,0 +1,14 @@
+{
+  "name": "eur-exchange",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "openzeppelin-solidity": "^2.3.0",
+    "ethereum-bridge": "^0.6.2",
+    "remixd": "^0.1.8-alpha.6"
+  },
+  "scripts": {
+    "bridge": "ethereum-bridge -H localhost:7545 -a 9 --dev",
+    "remix": "remixd -s . --remix-ide https://remix.ethereum.org"
+  }
+}

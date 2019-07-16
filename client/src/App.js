@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import ExchangeContract from "./contracts/Exchange.json";
+import EURExchangeContract from "./contracts/EURExchange.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
@@ -17,9 +17,9 @@ class App extends Component {
 
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();
-            const deployedNetwork = ExchangeContract.networks[networkId];
+            const deployedNetwork = EURExchangeContract.networks[networkId];
             const instance = new web3.eth.Contract(
-                ExchangeContract.abi,
+                EURExchangeContract.abi,
                 deployedNetwork && deployedNetwork.address,
             );
 

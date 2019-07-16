@@ -3,7 +3,7 @@
 
 # Oráculo
 
-El sistema usa un [oráculo](./contracts/EUROracle.sol) que da la tasa de cambio ETH->EUR y viceversa.
+El sistema usa un [oráculo](ethereum/contracts/EUROracle.sol) que da la tasa de cambio ETH->EUR y viceversa.
 Para su implementación se ha hecho uso de [oraclize](https://docs.provable.xyz/), de forma que se emite un evento que
 es capturado por esta empresa, y ejecuta la llamada remota a una URL data y extrae del JSON de respuesta el elemento
 que simboliza la tasa de cambio. Una vez conseguido dicho elemento ejecuta la función del
@@ -20,7 +20,7 @@ vuelta que ejecuta la función ``__callback``.
 
 Es interesante mencionar que el contrato está disponible en ``EthPM`` bajo el nombre de ``oraclize-api``. Sin embargo
 dicho contrato está preparado para ser compilado con una versión de solidity bastante inferior a la usada. Es por ello
-que finalmente se ha decidido copiar el contrato [UsingOraclize.sol](./contracts/UsingOraclize.sol). En caso contrario
+que finalmente se ha decidido copiar el contrato [UsingOraclize.sol](ethereum/contracts/UsingOraclize.sol). En caso contrario
 sencillamente se habrían declarado las dependencias en ``ethpm.json`` de la siguiente manera:
 
 ```json

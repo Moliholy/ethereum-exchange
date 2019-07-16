@@ -1,0 +1,12 @@
+{
+  "manifest_version": 1,
+  "package_name": "eur-exchange",
+  "version": "0.1.0",
+  "authors": [
+    "José Molina Colmenero <jmolinacolmenero@gmail.com>"
+  ],
+  "sources": [
+    "./contracts"
+  ],
+  "dependencies": {}
+}
