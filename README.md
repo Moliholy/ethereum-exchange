@@ -25,7 +25,7 @@ sencillamente se habrían declarado las dependencias en ``ethpm.json`` de la sig
 
 ```json
 {
-  ...
+
   
   "dependencies": {
     "oraclize-api": "^1.0.0"
