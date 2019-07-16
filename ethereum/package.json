@@ -5,10 +5,12 @@
   "devDependencies": {
     "openzeppelin-solidity": "^2.3.0",
     "ethereum-bridge": "^0.6.2",
-    "remixd": "^0.1.8-alpha.6"
+    "remixd": "^0.1.8-alpha.6",
+    "truffle": "^5.0.27"
   },
   "scripts": {
     "bridge": "ethereum-bridge -H localhost:7545 -a 9 --dev",
-    "remix": "remixd -s . --remix-ide https://remix.ethereum.org"
+    "remix": "remixd -s . --remix-ide https://remix.ethereum.org",
+    "migrate": "rm -rf build/ && truffle migrate"
   }
 }

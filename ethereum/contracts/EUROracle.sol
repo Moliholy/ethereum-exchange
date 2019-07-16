@@ -1,33 +1,28 @@
 pragma solidity ^0.5.0;
 
 import "./UsingOraclize.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /** 
  *  @title Oracle to get ETH->EUR and EUR->ETH rates
  *  @author José Molina Colmenero
  *  @notice Rates are not guaranteed to be up to date
  */
-contract EUROracle is usingOraclize {
+contract EUROracle is usingOraclize, Ownable
+{
     uint public ETHEUR;
     bytes32 public lastCallId;
     uint public lastUpdated;
     string public query = "json(https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR).EUR";
-    address owner;
-    
-    modifier onlyOwner()
-    {
-        require(msg.sender == owner);
-        _;
-    }
     
     event RateUpdated(uint newValue);
     event FundsReceived(uint funds);
 
     constructor()
+      Ownable()
       public
       payable
     {
-        owner = msg.sender;
         update();  // first time it's for free!
         logFundsReceived();
     }

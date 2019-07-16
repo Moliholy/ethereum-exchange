@@ -1,7 +1,7 @@
-const Exchange = artifacts.require("Exchange");
 const EUROracle = artifacts.require("EUROracle");
+const EURExchange = artifacts.require("EURExchange");
 
-module.exports = function (deployer) {
-    deployer.deploy(Exchange);
-    deployer.deploy(EUROracle);
+module.exports = async function (deployer) {
+    await deployer.deploy(EUROracle);
+    await deployer.deploy(EURExchange, EUROracle.address);
 };
