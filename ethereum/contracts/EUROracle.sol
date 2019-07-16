@@ -18,8 +18,7 @@ contract EUROracle is usingOraclize, Ownable
     event RateUpdated(uint newValue);
     event FundsReceived(uint funds);
 
-    constructor()
-      Ownable()
+    constructor() Ownable()
       public
       payable
     {
@@ -46,7 +45,7 @@ contract EUROracle is usingOraclize, Ownable
      * @dev this function must be private as it's used internally only
      */
     function logFundsReceived()
-      private
+      internal
     {
         if (msg.value > 0) {
             emit FundsReceived(msg.value);
@@ -108,7 +107,7 @@ contract EUROracle is usingOraclize, Ownable
      * @param _rate the ETH->EUR exchange rate
      */
     function setRate(uint _rate)
-      private
+      internal
     {
         ETHEUR = _rate;
         lastUpdated = now;
