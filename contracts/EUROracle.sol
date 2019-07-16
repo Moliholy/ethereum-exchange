@@ -10,6 +10,7 @@ import "./UsingOraclize.sol";
 contract EUROracle is usingOraclize {
     uint public ETHEUR;
     bytes32 public lastCallId;
+    uint public lastUpdated;
     string public query = "json(https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=EUR).EUR";
     address owner;
     
@@ -27,10 +28,7 @@ contract EUROracle is usingOraclize {
       payable
     {
         owner = msg.sender;
-        
-        // even though it works on testnet, in ganache it doesn't as there's no infrastructure
-        // hence this line is commented out to be able to work with ganache
-        // update();  // first time it's for free!
+        update();  // first time it's for free!
         logFundsReceived();
     }
     
@@ -44,8 +42,8 @@ contract EUROracle is usingOraclize {
     {
         require(msg.sender == oraclize_cbAddress());
         require(_id == lastCallId);
-        ETHEUR = parseInt(_result, 2);
-        emit RateUpdated(ETHEUR);
+        uint rate = parseInt(_result, 2);
+        setRate(rate);
     }
     
     /**
@@ -111,6 +109,18 @@ contract EUROracle is usingOraclize {
     }
     
     /**
+     * @notice To set the exchange rate and update the timer
+     * @param _rate the ETH->EUR exchange rate
+     */
+    function setRate(uint _rate)
+      private
+    {
+        ETHEUR = _rate;
+        lastUpdated = now;
+        emit RateUpdated(ETHEUR);
+    }
+    
+    /**
      * @notice To manually set the price in case services are down
      * @param _ETHEUR The ETH->EUR rate to be manually set
      */
@@ -118,7 +128,7 @@ contract EUROracle is usingOraclize {
       public
       onlyOwner
     {
-        ETHEUR = _ETHEUR;
+        setRate(_ETHEUR);
     }
       
     /**
