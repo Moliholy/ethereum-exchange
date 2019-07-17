@@ -16,6 +16,7 @@ contract EURExchange is Stoppable
     /////////// Libraries ///////////
     using SafeMath for uint;
 
+
     /////////// Attributes ///////////
     EUROracle public oracle;
     uint public ownerBalance;
@@ -24,18 +25,21 @@ contract EURExchange is Stoppable
     mapping(address => uint) public balances;
     mapping(address => bool) public authorizations;
 
+
     /////////// Events ///////////
     event BalanceCollected(uint balance);
     event ExchangeRequested(address customer, uint amountWei, uint rawAmountCents, uint finalAmountCents);
     event WithdrawPerformed(address customer, uint amount, uint balance);
     event DepositPerformed(address customer, uint amount, uint balance);
-    
+
+
     /////////// Modifiers ///////////
     modifier authorized()
     {
         require(isAuthorized(), "This address is not authorized");
         _;
     }
+
 
     /////////// Owner-only functions ///////////
     
@@ -128,7 +132,8 @@ contract EURExchange is Stoppable
         minAmount = _minAmount;
     }
 
-    /////////// Public functions ///////////
+
+    /////////// Public and external functions ///////////
     
     /**
      * @notice Deposits funds into this contract.
