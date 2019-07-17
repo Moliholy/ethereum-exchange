@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "./UsingOraclize.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "ethereum-api/oraclizeAPI_0.5.sol";
 
 /** 
  *  @title Oracle to get ETH->EUR and EUR->ETH rates

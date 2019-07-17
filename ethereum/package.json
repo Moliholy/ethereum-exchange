@@ -2,11 +2,13 @@
   "name": "eur-exchange",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
+  "dependencies": {
     "openzeppelin-solidity": "^2.3.0",
+    "ethereum-api": "https://github.com/provable-things/ethereum-api"
+  },
+  "devDependencies": {
     "ethereum-bridge": "^0.6.2",
-    "remixd": "^0.1.8-alpha.6",
-    "truffle": "^5.0.27"
+    "remixd": "^0.1.8-alpha.6"
   },
   "scripts": {
     "bridge": "ethereum-bridge -H localhost:7545 -a 9 --dev",
