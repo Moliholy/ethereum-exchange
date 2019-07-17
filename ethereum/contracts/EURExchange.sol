@@ -5,38 +5,55 @@ import "./Stoppable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 
+/**
+ * @title Contract to exchange ETH for EUR.
+ * @author José Molina Colmenero
+ * @notice The owner of this contract holds funds in EUR, approves customers and
+ *         accepts ETH->EUR exchanges for a fee.
+ */
 contract EURExchange is Stoppable
 {
-    // Libraries
+    /////////// Libraries ///////////
     using SafeMath for uint;
-    
-    // Attributes
+
+    /////////// Attributes ///////////
     EUROracle public oracle;
     uint public ownerBalance;
     uint public feePercentage = 2;
+    uint public minAmount = 0.1 ether;
     mapping(address => uint) public balances;
     mapping(address => bool) public authorizations;
-    
-    // Events
+
+    /////////// Events ///////////
     event BalanceCollected(uint balance);
     event ExchangeRequested(address customer, uint amountWei, uint rawAmountCents, uint finalAmountCents);
     event WithdrawPerformed(address customer, uint amount, uint balance);
     event DepositPerformed(address customer, uint amount, uint balance);
     
-    // Modifiers
+    /////////// Modifiers ///////////
     modifier authorized()
     {
         require(isAuthorized(), "This address is not authorized");
         _;
     }
+
+    /////////// Owner-only functions ///////////
     
-    // Owner-only functions
+    /**
+     * @notice Creates a new contract.
+     * @param _oracle address of the EUROracle to be used.
+     */
     constructor(address payable _oracle) Stoppable()
       public
     {
         oracle = EUROracle(_oracle);
     }
     
+    /**
+     * @notice Allow a customer to participate.
+     *         Only the owner can perform this operation.
+     * @dev The owner can not allow himself to participate.
+     */
     function grantAuthorization(address _authorizedAddress)
       external
       onlyOwner
@@ -46,6 +63,10 @@ contract EURExchange is Stoppable
         authorizations[_authorizedAddress] = true;
     }
     
+    /**
+     * @notice Disallow a customer to participate.
+     *         Only the owner can perform this operation.
+     */
     function denyAuthorization(address _unauthorizedAddress)
       external
       onlyOwner
@@ -53,6 +74,11 @@ contract EURExchange is Stoppable
         authorizations[_unauthorizedAddress] = false;
     }
     
+    /**
+     * @notice Allows the owner to collect its own earnings.
+     *         Only the owner can perform this operation.
+     * @dev Resets owner's balance to zero.
+     */
     function collectBalance()
       external
       onlyOwner
@@ -63,6 +89,11 @@ contract EURExchange is Stoppable
         msg.sender.transfer(balance);
     }
     
+    /**
+     * @notice Sets the percentage the owner is going to earn per exchange.
+     *         Only the owner can perform this operation.
+     * @dev the value has to be between 0 and 100.
+     */
     function setFeePercentage(uint _feePercentage)
       external
       onlyOwner
@@ -72,6 +103,11 @@ contract EURExchange is Stoppable
         feePercentage = _feePercentage;
     }
     
+    /**
+     * @notice Sets the EUROracle's address.
+     *         Only the owner can perform this operation.
+     * @dev If using an invalid address the system will collapse.
+     */
     function setOracle(address payable _oracle)
       external
       onlyOwner
@@ -81,26 +117,59 @@ contract EURExchange is Stoppable
         oracle = EUROracle(_oracle);
     }
     
-    // Public functions
+    /**
+     * @notice Sets the minimum amount to exchange.
+     *         Only the owner can perform this operation.
+     */
+    function setMinAmount(uint _minAmount)
+      external
+      onlyOwner
+    {
+        minAmount = _minAmount;
+    }
+
+    /////////// Public functions ///////////
+    
+    /**
+     * @notice Deposits funds into this contract.
+     *         This operation does not trigger an exchange.
+     * @dev Requires ether to be sent. Otherwise the operation will abort.
+     */
     function deposit()
       public
       payable
       authorized
       stopInEmergency
     {
-        if (msg.value > 0) {
-            balances[msg.sender] += msg.value;
-            emit DepositPerformed(msg.sender, msg.value, getBalance());
-        }
+        require(msg.value > 0);
+        
+        balances[msg.sender] += msg.value;
+        emit DepositPerformed(msg.sender, msg.value, getBalance());
     }
     
+    /**
+     * @notice Performs an exchange operation.
+     *         A given amount is taken from this user's funds in the contract
+     *         and are given to the owner. The owner will then send the funds
+     *         in EUR to this customer.
+     *         The owner might take a percentage of the amount as a payment for
+     *         its services.
+     *         Optionally it is possible to deposit extra funds by sending ether
+     *         when calling this function.
+     * @dev If the customer has not enough funds the operation will be aborted.
+     * @param _amount Amount of wei to be exchanged for EUR.
+     */
     function exchange(uint _amount)
       public
       payable
       authorized
       stopInEmergency
     {
-        deposit();
+        require(_amount >= minAmount, "Amount too low to exchange");
+        
+        if (msg.value > 0) {
+            deposit();
+        }
         require(getBalance() >= _amount, "Insufficient funds");
         
         (uint rawAmountCents, uint finalAmountCents) = getExchangeAmounts(_amount);
@@ -109,6 +178,9 @@ contract EURExchange is Stoppable
         emit ExchangeRequested(msg.sender, _amount, rawAmountCents, finalAmountCents);
     }
     
+    /**
+     * @notice Collects all funds for a given customer.
+     */
     function withdraw()
       public
       stopInEmergency
@@ -117,6 +189,11 @@ contract EURExchange is Stoppable
         withdraw(amount);
     }
     
+    /**
+     * @notice Collects some amount of a customer's current funds.
+     * @dev If the customer does not have enough funds the operation will be aborted.
+     * @param _amount Amount of funds to collect.
+     */
     function withdraw(uint _amount)
       public
       stopInEmergency
@@ -128,6 +205,10 @@ contract EURExchange is Stoppable
         msg.sender.transfer(_amount);
     }
     
+    /**
+     * @notice Gets a tuple with both the raw amount of EUR cents worth a given amount of wei,
+     *         and the exchange amount after applying fees using this service.
+     */
     function getExchangeAmounts(uint _amount)
       public
       view
@@ -140,6 +221,9 @@ contract EURExchange is Stoppable
         return (rawAmountCents, finalAmountCents);
     }
     
+    /**
+     * @notice Gets a customer's current deposited balance.
+     */
     function getBalance()
       public
       view
@@ -148,6 +232,9 @@ contract EURExchange is Stoppable
         return balances[msg.sender];
     }
     
+    /**
+     * @notice Gets whether a customer is authorized to use this service or not.
+     */
     function isAuthorized()
       public
       view
@@ -156,6 +243,10 @@ contract EURExchange is Stoppable
         return authorizations[msg.sender];
     }
     
+    /**
+     * @notice Default function. Sending ether is not allowed.
+     *         Instead, use deposit().
+     */
     function()
       external
       payable

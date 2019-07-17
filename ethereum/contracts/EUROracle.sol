@@ -4,9 +4,9 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "ethereum-api/oraclizeAPI_0.5.sol";
 
 /** 
- *  @title Oracle to get ETH->EUR and EUR->ETH rates
+ *  @title Oracle to get ETH->EUR and EUR->ETH rates.
  *  @author José Molina Colmenero
- *  @notice Rates are not guaranteed to be up to date
+ *  @notice Rates are not guaranteed to be up to date.
  */
 contract EUROracle is usingOraclize, Ownable
 {
@@ -27,9 +27,9 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice Callback function to be invoked by Provable in order to set the ETH->EUR exchange rate
-     * @param _id ID of the last request to Provable
-     * @param _result ETH->EUR exchange rate as a string
+     * @notice Callback function to be invoked by Provable in order to set the ETH->EUR exchange rate.
+     * @param _id ID of the last request to Provable.
+     * @param _result ETH->EUR exchange rate as a string.
      */
     function __callback(bytes32 _id, string memory _result)
       public
@@ -41,8 +41,8 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice Log the amount sent to the contract, if any
-     * @dev this function must be private as it's used internally only
+     * @notice Log the amount sent to the contract, if any.
+     * @dev this function must be private as it's used internally only.
      */
     function logFundsReceived()
       internal
@@ -53,9 +53,9 @@ contract EUROracle is usingOraclize, Ownable
     }
 
     /**
-     * @notice Trigger the query to Provable to get the ETH->EUR exchange rate
-     * @dev It is possible to refill the contract along with this invokation
-     * @dev Careful: this function consumes a lot of gas
+     * @notice Trigger the query to Provable to get the ETH->EUR exchange rate.
+     * @dev It is possible to refill the contract along with this invokation.
+     * @dev Careful: this function consumes a lot of gas.
      */
     function update()
       public
@@ -67,8 +67,8 @@ contract EUROracle is usingOraclize, Ownable
     }
 
     /**
-     * @notice Returns 1 ETH in EUR cents
-     * @return the number of euros (in cents) worth one ether
+     * @notice Returns 1 ETH in EUR cents.
+     * @return the number of euros (in cents) worth one ether.
      */
     function EUR()
       public
@@ -79,8 +79,8 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice Returns 1 EUR in WEI
-     * @return the number of weis worth one euro
+     * @notice Returns 1 EUR in WEI.
+     * @return the number of weis worth one euro.
      */
     function WEI()
       public
@@ -91,9 +91,9 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice Manually set the query in case the service is off
-     * @param _query string that represents URL and operations to perform in order to get the exchange rate
-     * @dev owner-restricted operation
+     * @notice Manually set the query in case the service is off.
+     * @param _query string that represents URL and operations to perform in order to get the exchange rate.
+     * @dev owner-restricted operation.
      */
     function setQuery(string memory _query)
       public
@@ -103,8 +103,8 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice To set the exchange rate and update the timer
-     * @param _rate the ETH->EUR exchange rate
+     * @notice To set the exchange rate and update the timer.
+     * @param _rate the ETH->EUR exchange rate.
      */
     function setRate(uint _rate)
       internal
@@ -115,8 +115,8 @@ contract EUROracle is usingOraclize, Ownable
     }
     
     /**
-     * @notice To manually set the price in case services are down
-     * @param _ETHEUR The ETH->EUR rate to be manually set
+     * @notice To manually set the price in case services are down.
+     * @param _ETHEUR The ETH->EUR rate to be manually set.
      */
     function setETHEUR(uint _ETHEUR)
       public
@@ -126,7 +126,7 @@ contract EUROracle is usingOraclize, Ownable
     }
       
     /**
-     * @notice Used to refill the oracle by sending ether
+     * @notice Used to refill the oracle by sending ether.
      */
     function()
       external
