@@ -34,8 +34,9 @@ contract EUROracle is usingOraclize, Ownable
     function __callback(bytes32 _id, string memory _result)
       public
     {
-        require(msg.sender == oraclize_cbAddress());
-        require(_id == lastCallId);
+        require(msg.sender == oraclize_cbAddress(), "This address can not perform this operation");
+        require(_id == lastCallId, "This call ID does not correspond to the last requested one");
+        
         uint rate = parseInt(_result, 2);
         setRate(rate);
     }

@@ -216,7 +216,7 @@ contract EURExchange is Stoppable
     {
         uint rawAmountCents = oracle.EUR().mul(_amount).div(1 ether);
         uint finalAmountCents = rawAmountCents.mul(100 - feePercentage).div(100);
-        assert(finalAmountCents < rawAmountCents);
+        assert(finalAmountCents <= rawAmountCents);
         
         return (rawAmountCents, finalAmountCents);
     }
