@@ -3,6 +3,9 @@ import EURExchangeContract from "./contracts/EURExchange.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
+import OwnerView from "./components/OnwerView";
+import CustomerView from "./components/CustomerView";
+
 
 class App extends Component {
     state = {web3: null, account: null, contract: null};
@@ -44,22 +47,29 @@ class App extends Component {
         }
     };
 
+    isOwner() {
+        return this.state.account.toLowerCase() === this.state.owner.toLowerCase();
+    }
+
     render() {
         if (!this.state.web3) {
             return <div>Loading Web3, accounts, and contract...</div>;
         }
-        if (this.state.account === this.state.owner) {
+        if (this.isOwner()) {
             return (
-                <div className="App">
-                    <h1>I am the owner!</h1>
-                </div>
+                <OwnerView
+                    web3={this.state.web3}
+                    contract={this.state.contract}
+                    owner={this.state.owner}
+                />
             )
         }
         return (
-            <div className="App">
-                <h1>Owner is: {this.state.owner}</h1>
-                <h1>I am: {this.state.account}</h1>
-            </div>
+            <CustomerView
+                web3={this.state.web3}
+                contract={this.state.contract}
+                account={this.state.account}
+            />
         );
     }
 }
