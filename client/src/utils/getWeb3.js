@@ -10,7 +10,7 @@ const getWeb3 = () =>
                 try {
                     // Request account access if needed
                     await window.ethereum.enable();
-                    // Acccounts now exposed
+                    // Accounts now exposed
                     resolve(web3);
                 } catch (error) {
                     reject(error);
@@ -26,7 +26,7 @@ const getWeb3 = () =>
             // Fallback to localhost; use dev console port by default...
             else {
                 const provider = new Web3.providers.HttpProvider(
-                    "http://127.0.0.1:7545"
+                    "http://localhost:7545/"
                 );
                 const web3 = new Web3(provider);
                 console.log("No web3 instance injected, using Local web3.");
