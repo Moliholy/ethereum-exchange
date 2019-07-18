@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import Layout from "./Layout";
 
 
 class OwnerView extends Component {
+    componentDidMount = async () => {
+
+    };
+
     render() {
         return (
-            <div className="App">
-                <h1>I am the owner! {this.props.owner}</h1>
-            </div>
+            <Layout title={"Owner View"}/>
         );
     }
 }

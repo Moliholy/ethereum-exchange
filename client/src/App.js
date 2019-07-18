@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import EURExchangeContract from "./contracts/EURExchange.json";
 import getWeb3 from "./utils/getWeb3";
 

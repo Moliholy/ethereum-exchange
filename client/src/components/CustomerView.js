@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+import Layout from "./OnwerView";
 
 
 class CustomerView extends Component {
     render() {
         return (
-            <div className="App">
-                <h1>I am {this.props.account}</h1>
-            </div>
+            <Layout title={"Customer View"}/>
         );
     }
 }
