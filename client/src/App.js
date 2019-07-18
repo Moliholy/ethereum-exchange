@@ -3,12 +3,12 @@ import EURExchangeContract from "./contracts/EURExchange.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
-import OwnerView from "./components/OnwerView";
-import CustomerView from "./components/CustomerView";
+import OwnerView from "./components/owner/OnwerView";
+import CustomerView from "./components/customer/CustomerView";
 
 
 class App extends Component {
-    state = {web3: null, account: null, contract: null};
+    state = {web3: null, account: null, owner: null, contract: null};
 
     componentDidMount = async () => {
         try {
@@ -37,7 +37,7 @@ class App extends Component {
 
             // Set web3, accounts, and contract to the state, and then proceed with an
             // example of interacting with the contract's methods.
-            this.setState({web3, account: account.toLowerCase(), owner: owner.toLowerCase(), contract: instance});
+            this.setState({web3, account, owner, contract: instance});
         } catch (error) {
             // Catch any errors for any of the above operations.
             alert(
@@ -58,7 +58,6 @@ class App extends Component {
         if (this.isOwner()) {
             return (
                 <OwnerView
-                    web3={this.state.web3}
                     contract={this.state.contract}
                     owner={this.state.owner}
                 />
@@ -66,7 +65,6 @@ class App extends Component {
         }
         return (
             <CustomerView
-                web3={this.state.web3}
                 contract={this.state.contract}
                 account={this.state.account}
             />
