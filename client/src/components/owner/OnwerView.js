@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Layout from "../Layout";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 import CollectView from "./CollectView";
+import AuthorizationsView from "./AuthorizationsView";
+import ConfigurationView from "./ConfigurationView";
 
 
 class OwnerView extends Component {
@@ -12,15 +14,16 @@ class OwnerView extends Component {
     };
 
     renderSelectedComponent = () => {
+        const contract = this.props.contract;
         switch (this.state.activeItem) {
             case 'collect':
-                return <CollectView contract={this.props.contract}/>;
+                return <CollectView contract={contract}/>;
             case 'authorizations':
-                break;
+                return <AuthorizationsView contract={contract}/>;
             case 'oracle':
                 break;
             case 'configuration':
-                break;
+                return <ConfigurationView contract={contract}/>;
             default:
                 return <h1>Invalid selection</h1>;
         }
