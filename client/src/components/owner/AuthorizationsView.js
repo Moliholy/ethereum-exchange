@@ -7,27 +7,31 @@ import logoKO from "../../images/icons8-cancel.png";
 class AuthorizationsView extends Component {
     state = {authorizations: []};
 
-    updateAuthorization(newAuthorization, index) {
-        const newAuthorizations = Object.assign([], this.state.authorizations);
-        newAuthorizations[index] = newAuthorization;
+    updateAuthorization(newAuthorization) {
+        const newAuthorizations = this.state.authorizations.map(authorization => {
+            if (authorization.address === newAuthorization.address) {
+                return newAuthorization;
+            }
+            return authorization;
+        });
         this.setState({authorizations: newAuthorizations});
     }
 
-    grantAuthorization = async (address, index) => {
+    grantAuthorization = async address => {
         try {
             await this.props.contract.methods.grantAuthorization(address).send();
             const newAuthorization = {address, authorized: true};
-            this.updateAuthorization(newAuthorization, index);
+            this.updateAuthorization(newAuthorization);
         } catch (e) {
             console.error(e);
         }
     };
 
-    denyAuthorization = async (address, index) => {
+    denyAuthorization = async address => {
         try {
             await this.props.contract.methods.denyAuthorization(address).send();
             const newAuthorization = {address, authorized: false};
-            this.updateAuthorization(newAuthorization, index);
+            this.updateAuthorization(newAuthorization);
         } catch (e) {
             console.error(e);
         }
@@ -55,18 +59,19 @@ class AuthorizationsView extends Component {
         const pastEvents = await contract.getPastEvents("AuthorizationRequested", {fromBlock: 0});
         const authorizations = [];
         pastEvents.forEach(event => authorizations.push({address: event.returnValues.customer, authorized: false}));
+        authorizations.reverse();  // chronological order
         this.setState({authorizations});
         await this.refreshAuthorizationStatuses();
     };
 
     renderAuthorizationRequests = () => {
-        const renderButton = (address, authorized, index) => {
+        const renderButton = (address, authorized) => {
             if (authorized) {
                 return (
                     <Button
                         secondary
                         style={{width: 120}}
-                        onClick={() => this.denyAuthorization(address, index)}>
+                        onClick={() => this.denyAuthorization(address)}>
                         Deny
                     </Button>
                 );
@@ -76,7 +81,7 @@ class AuthorizationsView extends Component {
                 <Button
                     primary
                     style={{width: 120}}
-                    onClick={() => this.grantAuthorization(address, index)}>
+                    onClick={() => this.grantAuthorization(address)}>
                     Grant
                 </Button>
             );
@@ -90,7 +95,7 @@ class AuthorizationsView extends Component {
                         <Header>{address}</Header>
                     </List.Content>
                     <List.Content floated='right'>
-                        {renderButton(address, authorized, index)}
+                        {renderButton(address, authorized)}
                     </List.Content>
                 </List.Item>
             );
