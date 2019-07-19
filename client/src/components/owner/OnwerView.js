@@ -5,6 +5,7 @@ import CollectView from "./CollectView";
 import AuthorizationsView from "./AuthorizationsView";
 import ConfigurationView from "./ConfigurationView";
 import OracleView from "./OracleView";
+import ExchangesView from "./ExchangesView";
 
 
 class OwnerView extends Component {
@@ -19,6 +20,8 @@ class OwnerView extends Component {
         switch (this.state.activeItem) {
             case 'collect':
                 return <CollectView contract={contract}/>;
+            case 'exchanges':
+                return <ExchangesView contract={contract}/>;
             case 'authorizations':
                 return <AuthorizationsView contract={contract}/>;
             case 'oracle':
@@ -41,6 +44,11 @@ class OwnerView extends Component {
                             <Menu.Item
                                 name='collect'
                                 active={activeItem === 'collect'}
+                                onClick={this.handleItemClick}
+                            />
+                            <Menu.Item
+                                name='exchanges'
+                                active={activeItem === 'exchanges'}
                                 onClick={this.handleItemClick}
                             />
                             <Menu.Item name='authorizations'
