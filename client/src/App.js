@@ -35,6 +35,7 @@ class App extends Component {
             // Refresh the state in case of metamask switching accounts
             web3.currentProvider.on('accountsChanged', accounts => {
                 console.log('Switching accounts');
+                web3.eth.defaultAccount = accounts[0];
                 this.setState({account: accounts[0]});
             });
 
@@ -62,14 +63,12 @@ class App extends Component {
             return (
                 <OwnerView
                     contract={this.state.contract}
-                    owner={this.state.owner}
                 />
             )
         }
         return (
             <CustomerView
                 contract={this.state.contract}
-                account={this.state.account}
             />
         );
     }
