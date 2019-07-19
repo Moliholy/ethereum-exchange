@@ -1,7 +1,12 @@
 import Web3 from "web3";
 
+let cachedWeb3 = null;
+
 const getWeb3 = () =>
     new Promise((resolve, reject) => {
+        if (cachedWeb3) {
+            resolve(cachedWeb3);
+        }
         // Wait for loading completion to avoid race conditions with web3 injection timing.
         window.addEventListener("load", async () => {
             // Modern dapp browsers...
@@ -11,6 +16,7 @@ const getWeb3 = () =>
                     // Request account access if needed
                     await window.ethereum.enable();
                     // Accounts now exposed
+                    cachedWeb3 = web3;
                     resolve(web3);
                 } catch (error) {
                     reject(error);
@@ -21,6 +27,7 @@ const getWeb3 = () =>
                 // Use Mist/MetaMask's provider.
                 const web3 = window.web3;
                 console.log("Injected web3 detected.");
+                cachedWeb3 = web3;
                 resolve(web3);
             }
             // Fallback to localhost; use dev console port by default...
@@ -30,9 +37,11 @@ const getWeb3 = () =>
                 );
                 const web3 = new Web3(provider);
                 console.log("No web3 instance injected, using Local web3.");
+                cachedWeb3 = web3;
                 resolve(web3);
             }
         });
     });
+
 
 export default getWeb3;

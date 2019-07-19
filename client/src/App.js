@@ -18,6 +18,9 @@ class App extends Component {
             // Use web3 to get the user's accounts.
             const accounts = await web3.eth.getAccounts();
             const account = accounts[0];
+            web3.eth.defaultAccount = account;
+            web3.eth.transactionConfirmationBlocks = 1;
+            web3.eth.defaultBlock = 'latest';
 
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();

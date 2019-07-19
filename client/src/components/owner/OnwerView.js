@@ -4,6 +4,7 @@ import { Grid, Menu, Segment } from "semantic-ui-react";
 import CollectView from "./CollectView";
 import AuthorizationsView from "./AuthorizationsView";
 import ConfigurationView from "./ConfigurationView";
+import OracleView from "./OracleView";
 
 
 class OwnerView extends Component {
@@ -21,7 +22,7 @@ class OwnerView extends Component {
             case 'authorizations':
                 return <AuthorizationsView contract={contract}/>;
             case 'oracle':
-                break;
+                return <OracleView/>;
             case 'configuration':
                 return <ConfigurationView contract={contract}/>;
             default:
@@ -58,7 +59,7 @@ class OwnerView extends Component {
                         </Menu>
                     </Grid.Column>
 
-                    <Grid.Column width={13}>
+                    <Grid.Column width={14}>
                         <Segment>
                             {this.renderSelectedComponent()}
                         </Segment>

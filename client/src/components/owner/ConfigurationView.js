@@ -14,31 +14,19 @@ class ConfigurationView extends Component {
         this.setState({fee: fee.toString(), oracle, minAmount: minAmount.toString()});
     };
 
-    setVariable = async (method) => {
-        try {
-            const owner = await this.props.contract.methods.owner().call();
-            await method.send({from: owner});
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     setFee = async () => {
         const fee = this.state.fee;
-        const method = this.props.contract.methods.setFeePercentage(fee);
-        await this.setVariable(method);
+        await this.props.contract.methods.setFeePercentage(fee).send();
     };
 
     setOracle = async () => {
         const oracle = this.state.oracle;
-        const method = this.props.contract.methods.setOracle(oracle);
-        await this.setVariable(method);
+        await this.props.contract.methods.setOracle(oracle).send();
     };
 
     setMinAmount = async () => {
         const minAmount = this.state.minAmount;
-        const method = this.props.contract.methods.setMinAmount(minAmount);
-        await this.setVariable(method);
+        await this.props.contract.methods.setMinAmount(minAmount).send();
     };
 
     render() {
