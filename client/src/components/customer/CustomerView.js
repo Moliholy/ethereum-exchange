@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Layout from "../Layout";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 import NewExchangeView from "./NewExchangeView";
-import CollectView from "./CollectView";
+import FundsView from "./FundsView";
 import ExchangesView from "../ExchangesView";
 import RequestAuthorizationView from "./RequestAuthorizationView";
 
@@ -24,8 +24,8 @@ class CustomerView extends Component {
         switch (this.state.activeItem) {
             case 'new exchange':
                 return <NewExchangeView/>;
-            case 'collect':
-                return <CollectView contract={contract}/>;
+            case 'funds':
+                return <FundsView contract={contract}/>;
             case 'exchanges':
                 return <ExchangesView contract={contract} eventFilter={{customer}}/>;
             case 'authorization':
@@ -71,8 +71,8 @@ class CustomerView extends Component {
                                 onClick={this.handleItemClick}
                             />
                             <Menu.Item
-                                name='collect'
-                                active={this.state.activeItem === 'collect'}
+                                name='funds'
+                                active={this.state.activeItem === 'funds'}
                                 onClick={this.handleItemClick}
                             />
                             {this.renderRequestAuthorizationMenuOption()}
