@@ -28,10 +28,10 @@ contract EURExchange is Stoppable
 
     /////////// Events ///////////
     event BalanceCollected(uint balance);
-    event ExchangeRequested(address customer, uint amountWei, uint rawAmountCents, uint finalAmountCents);
-    event AuthorizationRequested(address customer);
-    event WithdrawPerformed(address customer, uint amount, uint balance);
-    event DepositPerformed(address customer, uint amount, uint balance);
+    event ExchangeRequested(address indexed customer, uint amountWei, uint rawAmountCents, uint finalAmountCents);
+    event AuthorizationRequested(address indexed customer);
+    event WithdrawPerformed(address indexed customer, uint amount, uint balance);
+    event DepositPerformed(address indexed customer, uint amount, uint balance);
 
 
     /////////// Modifiers ///////////
