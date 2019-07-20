@@ -5,7 +5,7 @@ import CollectView from "./CollectView";
 import AuthorizationsView from "./AuthorizationsView";
 import ConfigurationView from "./ConfigurationView";
 import OracleView from "./OracleView";
-import ExchangesView from "./ExchangesView";
+import ExchangesView from "../ExchangesView";
 
 
 class OwnerView extends Component {

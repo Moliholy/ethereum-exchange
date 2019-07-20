@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Grid, Header, List } from "semantic-ui-react";
-import getWeb3 from "../../utils/getWeb3";
+import getWeb3 from "../utils/getWeb3";
 
 
 class ExchangesView extends Component {
     state = {exchanges: []};
 
     componentDidMount = async () => {
-        const contract = this.props.contract;
-        const pastEvents = await contract.getPastEvents("ExchangeRequested", {fromBlock: 0});
+        const {contract, eventFilter} = this.props;
+        const filter = eventFilter ? {filter: eventFilter} : {};
+        const options = Object.assign({fromBlock: 0}, filter);
+        const pastEvents = await contract.getPastEvents("ExchangeRequested", options);
         const exchanges = [];
         const web3 = await getWeb3();
         pastEvents.forEach(event => {
@@ -17,22 +19,21 @@ class ExchangesView extends Component {
                 customer,
                 amountWei: web3.utils.fromWei(amountWei.toString(), 'ether'),
                 rawAmount: (rawAmountCents.toNumber() / 100).toString(),
-                finalAmount: (finalAmountCents.toNumber() / 100).toString(),
-                gainedAmount: ((rawAmountCents.toNumber() - finalAmountCents.toNumber()) / 100).toString()
+                finalAmount: (finalAmountCents.toNumber() / 100).toString()
             });
         });
-        console.log(exchanges);
+        exchanges.reverse();
         this.setState({exchanges});
     };
 
     renderExchangeRequests = () => {
         return this.state.exchanges.map((exchange, index) => {
-            const {customer, amountWei, rawAmount, finalAmount, gainedAmount} = exchange;
+            const {customer, amountWei, rawAmount, finalAmount} = exchange;
             return (
                 <List.Item key={index}>
                     <List.Content>
                         <Grid divided stackable>
-                            <Grid.Column width={6}>
+                            <Grid.Column width={8}>
                                 {customer}
                             </Grid.Column>
                             <Grid.Column width={2}>
@@ -43,9 +44,6 @@ class ExchangesView extends Component {
                             </Grid.Column>
                             <Grid.Column width={2}>
                                 {finalAmount}€
-                            </Grid.Column>
-                            <Grid.Column width={2}>
-                                {gainedAmount}€
                             </Grid.Column>
                         </Grid>
                     </List.Content>
@@ -58,7 +56,7 @@ class ExchangesView extends Component {
         return (
             <List divided selection verticalAlign='middle'>
                 <Grid divided stackable>
-                    <Grid.Column width={6}>
+                    <Grid.Column width={8}>
                         <Header>Customer</Header>
                     </Grid.Column>
                     <Grid.Column width={2}>
@@ -69,9 +67,6 @@ class ExchangesView extends Component {
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Header>Exchanged EUR</Header>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Header>Gained EUR</Header>
                     </Grid.Column>
                 </Grid>
                 {this.renderExchangeRequests()}

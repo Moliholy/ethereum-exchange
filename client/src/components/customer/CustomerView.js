@@ -3,7 +3,7 @@ import Layout from "../Layout";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 import NewExchangeView from "./NewExchangeView";
 import CollectView from "./CollectView";
-import ExchangesView from "./ExchangesView";
+import ExchangesView from "../ExchangesView";
 import RequestAuthorizationView from "./RequestAuthorizationView";
 
 
@@ -20,14 +20,14 @@ class CustomerView extends Component {
     };
 
     renderSelectedComponent = () => {
-        const contract = this.props.contract;
+        const {contract, customer} = this.props;
         switch (this.state.activeItem) {
             case 'new exchange':
                 return <NewExchangeView/>;
             case 'collect':
                 return <CollectView contract={contract}/>;
             case 'exchanges':
-                return <ExchangesView contract={contract}/>;
+                return <ExchangesView contract={contract} eventFilter={{customer}}/>;
             case 'authorization':
                 return <RequestAuthorizationView contract={contract}/>;
             default:
@@ -60,7 +60,7 @@ class CustomerView extends Component {
 
     render() {
         return (
-            <Layout title={"Owner View"}>
+            <Layout title={"Customer View"}>
                 <Grid>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>
