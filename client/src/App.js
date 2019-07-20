@@ -33,7 +33,7 @@ class App extends Component {
             const owner = await instance.methods.owner().call();
 
             // Refresh the state in case of metamask switching accounts
-            web3.currentProvider.on('accountsChanged', accounts => {
+            web3.currentProvider.on('accountsChanged', () => {
                 console.log('Switching accounts');
                 window.location.reload();
             });
