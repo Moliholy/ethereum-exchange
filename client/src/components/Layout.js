@@ -1,11 +1,11 @@
 import React from 'react';
-import Header from "./Header";
+import AppHeader from "./AppHeader";
 
 export default props => {
-    const {title, address} = props;
+    const {title, address, contract} = props;
     return (
         <div>
-            <Header title={title} address={address}/>
+            <AppHeader title={title} address={address} contract={contract}/>
             {props.children}
         </div>
     );

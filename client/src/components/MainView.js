@@ -36,7 +36,7 @@ class MainView extends Component {
 
     render() {
         return (
-            <Layout title={this.state.title} address={this.props.address}>
+            <Layout title={this.state.title} address={this.props.address} contract={this.props.contract}>
                 <Grid style={{padding: 15}}>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>
