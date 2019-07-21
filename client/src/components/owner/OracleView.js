@@ -78,6 +78,7 @@ class OracleView extends Component {
                 <Grid divided stackable>
                     <Grid.Row columns={1}>
                         <Grid.Column textAlign={'center'}>
+                            <Icon name='settings' size={'huge'} />
                             <Header as={'h2'} style={{paddingBottom: 20}}>
                                 1 ETH = {this.state.rate} EUR
                             </Header>
