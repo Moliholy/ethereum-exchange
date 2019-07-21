@@ -7,7 +7,7 @@ import CustomerView from "./components/customer/CustomerView";
 
 
 class App extends Component {
-    state = {web3: null, account: null, owner: null, contract: null};
+    state = {web3: null, account: null, isOwner: false, contract: null};
 
     componentDidMount = async () => {
         try {
@@ -29,7 +29,7 @@ class App extends Component {
                 deployedNetwork && deployedNetwork.address,
             );
 
-            const owner = await instance.methods.owner().call();
+            const isOwner = await instance.methods.isOwner().call();
 
             // Refresh the state in case of metamask switching accounts
             web3.currentProvider.on('accountsChanged', () => {
@@ -39,25 +39,21 @@ class App extends Component {
 
             // Set web3, accounts, and contract to the state, and then proceed with an
             // example of interacting with the contract's methods.
-            this.setState({web3, account, owner, contract: instance});
+            this.setState({web3, account, isOwner, contract: instance});
         } catch (error) {
             // Catch any errors for any of the above operations.
+            console.error(error);
             alert(
                 `Failed to load web3, accounts, or contract. Check console for details.`,
             );
-            console.error(error);
         }
     };
-
-    isOwner() {
-        return this.state.account.toLowerCase() === this.state.owner.toLowerCase();
-    }
 
     render() {
         if (!this.state.web3) {
             return <div/>;
         }
-        if (this.isOwner()) {
+        if (this.state.isOwner) {
             return (
                 <OwnerView
                     contract={this.state.contract}
