@@ -1,36 +1,69 @@
 import React, { Component } from 'react';
 import ConfigurationField from "./ConfigurationField";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
+import { Button } from "semantic-ui-react";
 
 
 class ConfigurationView extends Component {
-    state = {fee: '', oracle: '', minAmount: ''};
+    state = {fee: '', oracle: '', minAmount: '', newOwner: '', stopped: false};
 
     componentDidMount = async () => {
         const contract = this.props.contract;
         const fee = await contract.methods.feePercentage().call();
         const oracle = await contract.methods.oracle().call();
         const minAmount = await contract.methods.minAmount().call();
-        this.setState({fee: fee.toString(), oracle, minAmount: minAmount.toString()});
+        const stopped = await contract.methods.stopped().call();
+        this.setState({fee: fee.toString(), oracle, minAmount: minAmount.toString(), stopped});
     };
 
     setFee = async () => {
-        const fee = this.state.fee;
-        await this.props.contract.methods.setFeePercentage(fee).send();
+        try {
+            const fee = this.state.fee;
+            await this.props.contract.methods.setFeePercentage(fee).send();
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     setOracle = async () => {
-        const oracle = this.state.oracle;
-        await this.props.contract.methods.setOracle(oracle).send();
+        try {
+            const oracle = this.state.oracle;
+            await this.props.contract.methods.setOracle(oracle).send();
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     setMinAmount = async () => {
-        const minAmount = this.state.minAmount;
-        await this.props.contract.methods.setMinAmount(minAmount).send();
+        try {
+            const minAmount = this.state.minAmount;
+            await this.props.contract.methods.setMinAmount(minAmount).send();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    transferOwnership = async () => {
+        try {
+            const newOwner = this.state.newOwner;
+            await this.props.contract.methods.transferOwnership(newOwner).send();
+            window.location.reload();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    emergencyStop = async () => {
+        try {
+            await this.props.contract.methods.toggleContractActive().send();
+            this.setState({stopped: !this.state.stopped});
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     render() {
-        const {fee, oracle, minAmount} = this.state;
+        const {fee, oracle, minAmount, newOwner, stopped} = this.state;
         return (
             <Grid divided={'vertically'}>
                 <Grid.Column width={5}>
@@ -53,6 +86,18 @@ class ConfigurationView extends Component {
                                         label={'Minimum amount'}
                                         onClick={this.setMinAmount}
                                         defaultValue={minAmount}/>
+                    <br/>
+                    <br/>
+                    <ConfigurationField placeholder={'Transfer ownership'}
+                                        onChange={event => this.setState({newOwner: event.target.value})}
+                                        label={'Owner'}
+                                        onClick={this.transferOwnership}
+                                        defaultValue={newOwner}/>
+                    <br/>
+                    <br/>
+                    <Button size={'big'} color={stopped ? 'green' : 'red' } onClick={this.emergencyStop}>
+                        {this.state.stopped ? 'Resume all actions' : 'Emergency stop'}
+                    </Button>
                 </Grid.Column>
             </Grid>
         );

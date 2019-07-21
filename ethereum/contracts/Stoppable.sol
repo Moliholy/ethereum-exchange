@@ -5,7 +5,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract Stoppable is Ownable
 {
-    bool private stopped = false;
+    bool public stopped = false;
 
     modifier stopInEmergency {
         require(!stopped, "Stoppable: this contract has its functionality stopped for security reasons");
