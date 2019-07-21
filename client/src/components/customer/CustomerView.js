@@ -8,7 +8,11 @@ import MainView from "../MainView";
 class CustomerView extends MainView {
     constructor(props) {
         super(props);
-        this.state = {...this.state, items: ['new exchange', 'funds', 'authorization']};
+        this.state = {
+            ...this.state,
+            title: 'Customer',
+            items: ['new exchange', 'funds', 'authorization']
+        };
     }
 
     renderSelectedComponent = () => {

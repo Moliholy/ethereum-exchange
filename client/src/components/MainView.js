@@ -6,7 +6,7 @@ import { Grid, Menu, Segment } from "semantic-ui-react";
 class MainView extends Component {
     constructor(props) {
         super(props);
-        this.state = {activeItem: null, items: []};
+        this.state = {activeItem: null, items: [], title: ''};
     }
 
     handleItemClick = (event, {name}) => {
@@ -36,7 +36,7 @@ class MainView extends Component {
 
     render() {
         return (
-            <Layout title={"Customer"} address={this.props.customer}>
+            <Layout title={this.state.title} address={this.props.address}>
                 <Grid style={{padding: 15}}>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>

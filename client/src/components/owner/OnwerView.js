@@ -10,7 +10,11 @@ import MainView from "../MainView";
 class OwnerView extends MainView {
     constructor(props) {
         super(props);
-        this.state = {...this.state, items: ['collect', 'exchanges', 'authorizations', 'oracle', 'configuration']};
+        this.state = {
+            ...this.state,
+            title: 'Owner',
+            items: ['collect', 'exchanges', 'authorizations', 'oracle', 'configuration']
+        };
     }
 
     renderSelectedComponent = () => {

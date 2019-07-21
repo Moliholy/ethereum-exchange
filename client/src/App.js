@@ -57,14 +57,14 @@ class App extends Component {
             return (
                 <OwnerView
                     contract={this.state.contract}
-                    owner={this.state.account}
+                    address={this.state.account}
                 />
             )
         }
         return (
             <CustomerView
                 contract={this.state.contract}
-                customer={this.state.account}
+                address={this.state.account}
             />
         );
     }
