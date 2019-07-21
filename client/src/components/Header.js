@@ -2,6 +2,7 @@ import React from 'react';
 import { Header, Menu } from "semantic-ui-react";
 
 export default props => {
+    const {title, address} = props;
     return (
         <Menu>
             <Menu.Item>
@@ -9,7 +10,10 @@ export default props => {
             </Menu.Item>
             <Menu.Menu position={"right"}>
                 <Menu.Item>
-                    {props.title}
+                    {title}
+                </Menu.Item>
+                <Menu.Item>
+                    {address}
                 </Menu.Item>
             </Menu.Menu>
         </Menu>

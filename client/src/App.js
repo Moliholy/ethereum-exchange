@@ -57,6 +57,7 @@ class App extends Component {
             return (
                 <OwnerView
                     contract={this.state.contract}
+                    owner={this.state.account}
                 />
             )
         }

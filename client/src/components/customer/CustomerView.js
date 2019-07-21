@@ -45,7 +45,7 @@ class CustomerView extends Component {
 
     render() {
         return (
-            <Layout title={"Customer View"}>
+            <Layout title={"Customer"} address={this.props.customer}>
                 <Grid>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>

@@ -34,10 +34,11 @@ class OwnerView extends Component {
     };
 
     render() {
-        const { activeItem } = this.state;
+        const activeItem  = this.state.activeItem;
+        const owner = this.props.owner;
 
         return (
-            <Layout title={"Owner View"}>
+            <Layout title={"Owner"} address={owner}>
                 <Grid>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>
