@@ -49,6 +49,7 @@ class FundsView extends Component {
                             <ConfigurationField placeholder={'Amount to send'}
                                                 onChange={event => this.setState({funds: event.target.value})}
                                                 label={'Fund'}
+                                                type={'number'}
                                                 buttonTitle={'Send'}
                                                 minWidth={400}
                                                 onClick={this.sendFunds}

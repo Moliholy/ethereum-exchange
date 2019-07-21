@@ -70,6 +70,7 @@ class ConfigurationView extends Component {
                     <ConfigurationField placeholder={'Fee'}
                                         onChange={event => this.setState({fee: event.target.value})}
                                         label={'Fee percentage'}
+                                        type={'number'}
                                         onClick={this.setFee}
                                         defaultValue={fee}/>
                     <br/>
@@ -84,6 +85,7 @@ class ConfigurationView extends Component {
                     <ConfigurationField placeholder={'Minimum amount'}
                                         onChange={event => this.setState({minAmount: event.target.value})}
                                         label={'Minimum amount'}
+                                        type={'number'}
                                         onClick={this.setMinAmount}
                                         defaultValue={minAmount}/>
                     <br/>

@@ -88,6 +88,7 @@ class OracleView extends Component {
                             <ConfigurationField placeholder={'Manually set the rate'}
                                                 onChange={event => this.setState({manualRate: event.target.value})}
                                                 label={'Rate'}
+                                                type={'number'}
                                                 minWidth={400}
                                                 onClick={this.setOracleRate}
                                                 defaultValue={this.state.manualRate}/>
