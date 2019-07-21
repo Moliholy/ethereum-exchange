@@ -3,12 +3,11 @@ import Layout from "../Layout";
 import { Grid, Menu, Segment } from "semantic-ui-react";
 import NewExchangeView from "./NewExchangeView";
 import FundsView from "./FundsView";
-import ExchangesView from "../ExchangesView";
 import RequestAuthorizationView from "./RequestAuthorizationView";
 
 
 class CustomerView extends Component {
-    state = {isAuthorized: false, activeItem: 'exchanges'};
+    state = {isAuthorized: false, activeItem: 'new exchange'};
 
     componentDidMount = async () => {
         const isAuthorized = await this.props.contract.methods.isAuthorized().call();
@@ -23,29 +22,15 @@ class CustomerView extends Component {
         const {contract, customer} = this.props;
         switch (this.state.activeItem) {
             case 'new exchange':
-                return <NewExchangeView/>;
+                return <NewExchangeView contract={contract} eventFilter={{customer}}/>;
             case 'funds':
                 return <FundsView contract={contract}/>;
-            case 'exchanges':
-                return <ExchangesView contract={contract} eventFilter={{customer}}/>;
             case 'authorization':
                 return <RequestAuthorizationView contract={contract}/>;
             default:
                 return <h1>Invalid selection</h1>;
         }
     };
-
-    renderNewExchangeMenuOption() {
-        if (this.state.isAuthorized) {
-            return (
-                <Menu.Item
-                    name='new exchange'
-                    active={this.state.activeItem === 'new exchange'}
-                    onClick={this.handleItemClick}
-                />
-            );
-        }
-    }
 
     renderRequestAuthorizationMenuOption() {
         if (!this.state.isAuthorized) {
@@ -64,10 +49,9 @@ class CustomerView extends Component {
                 <Grid>
                     <Grid.Column width={2}>
                         <Menu fluid vertical tabular>
-                            {this.renderNewExchangeMenuOption()}
                             <Menu.Item
-                                name='exchanges'
-                                active={this.state.activeItem === 'exchanges'}
+                                name='new exchange'
+                                active={this.state.activeItem === 'new exchange'}
                                 onClick={this.handleItemClick}
                             />
                             <Menu.Item

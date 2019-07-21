@@ -4,9 +4,12 @@ import getWeb3 from "../utils/getWeb3";
 
 
 class ExchangesView extends Component {
-    state = {exchanges: []};
+    constructor(props) {
+        super(props);
+        this.state = {exchanges: []};
+    }
 
-    componentDidMount = async () => {
+    loadExchanges = async () => {
         const {contract, eventFilter} = this.props;
         const filter = eventFilter ? {filter: eventFilter} : {};
         const options = Object.assign({fromBlock: 0}, filter);
@@ -24,6 +27,10 @@ class ExchangesView extends Component {
         });
         exchanges.reverse();
         this.setState({exchanges});
+    };
+
+    componentDidMount = async () => {
+        await this.loadExchanges();
     };
 
     renderExchangeRequests = () => {
