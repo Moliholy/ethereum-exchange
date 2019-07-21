@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
-import Layout from "../Layout";
-import { Grid, Menu, Segment } from "semantic-ui-react";
+import React from 'react';
 import CollectView from "./CollectView";
 import AuthorizationsView from "./AuthorizationsView";
 import ConfigurationView from "./ConfigurationView";
 import OracleView from "./OracleView";
 import ExchangesView from "../ExchangesView";
+import MainView from "../MainView";
 
 
-class OwnerView extends Component {
-    state = {activeItem: 'collect'};
-
-    handleItemClick = (event, {name}) => {
-        this.setState({activeItem: name});
-    };
+class OwnerView extends MainView {
+    constructor(props) {
+        super(props);
+        this.state = {...this.state, items: ['collect', 'exchanges', 'authorizations', 'oracle', 'configuration']};
+    }
 
     renderSelectedComponent = () => {
         const contract = this.props.contract;
@@ -32,51 +30,6 @@ class OwnerView extends Component {
                 return <h1>Invalid selection</h1>;
         }
     };
-
-    render() {
-        const activeItem  = this.state.activeItem;
-        const owner = this.props.owner;
-
-        return (
-            <Layout title={"Owner"} address={owner}>
-                <Grid>
-                    <Grid.Column width={2}>
-                        <Menu fluid vertical tabular>
-                            <Menu.Item
-                                name='collect'
-                                active={activeItem === 'collect'}
-                                onClick={this.handleItemClick}
-                            />
-                            <Menu.Item
-                                name='exchanges'
-                                active={activeItem === 'exchanges'}
-                                onClick={this.handleItemClick}
-                            />
-                            <Menu.Item name='authorizations'
-                                       active={activeItem === 'authorizations'}
-                                       onClick={this.handleItemClick}
-                            />
-                            <Menu.Item
-                                name='oracle'
-                                active={activeItem === 'oracle'}
-                                onClick={this.handleItemClick}
-                            />
-                            <Menu.Item name='configuration'
-                                       active={activeItem === 'configuration'}
-                                       onClick={this.handleItemClick}
-                            />
-                        </Menu>
-                    </Grid.Column>
-
-                    <Grid.Column width={14}>
-                        <Segment>
-                            {this.renderSelectedComponent()}
-                        </Segment>
-                    </Grid.Column>
-                </Grid>
-            </Layout>
-        );
-    }
 }
 
 export default OwnerView;
