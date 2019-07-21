@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import EURExchangeContract from "./contracts/EURExchange.json";
 import getWeb3 from "./utils/getWeb3";
 
-import "./App.css";
 import OwnerView from "./components/owner/OnwerView";
 import CustomerView from "./components/customer/CustomerView";
 
