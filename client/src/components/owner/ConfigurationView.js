@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import ConfigurationField from "./ConfigurationField";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import { Button } from "semantic-ui-react";
+import { getEURExchangeContract } from "../../utils/contracts";
 
 
 class ConfigurationView extends Component {
     state = {fee: '', oracle: '', minAmount: '', newOwner: '', stopped: false};
 
     componentDidMount = async () => {
-        const contract = this.props.contract;
+        const contract = await getEURExchangeContract();
         const fee = await contract.methods.feePercentage().call();
         const oracle = await contract.methods.oracle().call();
         const minAmount = await contract.methods.minAmount().call();
@@ -19,7 +20,8 @@ class ConfigurationView extends Component {
     setFee = async () => {
         try {
             const fee = this.state.fee;
-            await this.props.contract.methods.setFeePercentage(fee).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.setFeePercentage(fee).send();
         } catch (e) {
             console.error(e);
         }
@@ -28,7 +30,8 @@ class ConfigurationView extends Component {
     setOracle = async () => {
         try {
             const oracle = this.state.oracle;
-            await this.props.contract.methods.setOracle(oracle).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.setOracle(oracle).send();
         } catch (e) {
             console.error(e);
         }
@@ -37,7 +40,8 @@ class ConfigurationView extends Component {
     setMinAmount = async () => {
         try {
             const minAmount = this.state.minAmount;
-            await this.props.contract.methods.setMinAmount(minAmount).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.setMinAmount(minAmount).send();
         } catch (e) {
             console.error(e);
         }
@@ -46,7 +50,8 @@ class ConfigurationView extends Component {
     transferOwnership = async () => {
         try {
             const newOwner = this.state.newOwner;
-            await this.props.contract.methods.transferOwnership(newOwner).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.transferOwnership(newOwner).send();
             window.location.reload();
         } catch (e) {
             console.error(e);
@@ -55,10 +60,11 @@ class ConfigurationView extends Component {
 
     emergencyStop = async () => {
         try {
-            await this.props.contract.methods.toggleContractActive().send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.toggleContractActive().send();
             this.setState({stopped: !this.state.stopped});
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 

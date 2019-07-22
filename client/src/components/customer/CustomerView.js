@@ -16,14 +16,14 @@ class CustomerView extends MainView {
     }
 
     renderSelectedComponent = () => {
-        const {contract, customer} = this.props;
+        const {customer} = this.props;
         switch (this.state.activeItem) {
             case 'new exchange':
-                return <NewExchangeView contract={contract} eventFilter={{customer}}/>;
+                return <NewExchangeView eventFilter={{customer}}/>;
             case 'funds':
-                return <FundsView contract={contract}/>;
+                return <FundsView/>;
             case 'authorization':
-                return <RequestAuthorizationView contract={contract}/>;
+                return <RequestAuthorizationView/>;
             default:
                 return <h1>Invalid selection</h1>;
         }

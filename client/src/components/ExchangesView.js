@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, Header, List } from "semantic-ui-react";
 import getWeb3 from "../utils/getWeb3";
+import { getEURExchangeContract } from "../utils/contracts";
 
 
 class ExchangesView extends Component {
@@ -10,7 +11,8 @@ class ExchangesView extends Component {
     }
 
     loadExchanges = async () => {
-        const {contract, eventFilter} = this.props;
+        const {eventFilter} = this.props;
+        const contract = await getEURExchangeContract();
         const filter = eventFilter ? {filter: eventFilter} : {};
         const options = Object.assign({fromBlock: 0}, filter);
         const pastEvents = await contract.getPastEvents("ExchangeRequested", options);

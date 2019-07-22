@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Header, Image, List } from "semantic-ui-react";
 import logoOK from "../../images/icons8-approval.png";
 import logoKO from "../../images/icons8-cancel.png";
+import { getEURExchangeContract } from "../../utils/contracts";
 
 
 class AuthorizationsView extends Component {
@@ -19,7 +20,8 @@ class AuthorizationsView extends Component {
 
     grantAuthorization = async address => {
         try {
-            await this.props.contract.methods.grantAuthorization(address).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.grantAuthorization(address).send();
             const newAuthorization = {address, authorized: true};
             this.updateAuthorization(newAuthorization);
         } catch (e) {
@@ -29,7 +31,8 @@ class AuthorizationsView extends Component {
 
     denyAuthorization = async address => {
         try {
-            await this.props.contract.methods.denyAuthorization(address).send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.denyAuthorization(address).send();
             const newAuthorization = {address, authorized: false};
             this.updateAuthorization(newAuthorization);
         } catch (e) {
@@ -41,8 +44,9 @@ class AuthorizationsView extends Component {
         const {authorizations} = this.state;
         const newAuthorizations = [];
         const promises = [];
+        const contract = await getEURExchangeContract();
         authorizations.forEach(async authorization => {
-            const promise = this.props.contract.methods.authorizations(authorization.address).call();
+            const promise = contract.methods.authorizations(authorization.address).call();
             promises.push(promise);
         });
         const result = await Promise.all(promises);
@@ -55,7 +59,7 @@ class AuthorizationsView extends Component {
     };
 
     componentDidMount = async () => {
-        const contract = this.props.contract;
+        const contract = await getEURExchangeContract();
         const pastEvents = await contract.getPastEvents("AuthorizationRequested", {fromBlock: 0});
         const authorizations = [];
         pastEvents.forEach(event => authorizations.push({address: event.returnValues.customer, authorized: false}));

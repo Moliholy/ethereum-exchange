@@ -56,14 +56,12 @@ class App extends Component {
         if (this.state.isOwner) {
             return (
                 <OwnerView
-                    contract={this.state.contract}
                     address={this.state.account}
                 />
             )
         }
         return (
             <CustomerView
-                contract={this.state.contract}
                 address={this.state.account}
             />
         );

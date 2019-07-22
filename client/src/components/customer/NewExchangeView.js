@@ -1,6 +1,7 @@
 import React from 'react';
 import ConfigurationField from "../owner/ConfigurationField";
 import ExchangesView from "../ExchangesView";
+import { getEURExchangeContract } from "../../utils/contracts";
 
 
 class NewExchangeView extends ExchangesView {
@@ -11,7 +12,8 @@ class NewExchangeView extends ExchangesView {
 
     componentDidMount = async () => {
         try {
-            const balance = await this.props.contract.methods.getBalance().call();
+            const contract = await getEURExchangeContract();
+            const balance = await contract.methods.getBalance().call();
             this.setState({balance: parseInt(balance.toString())});
             await this.loadExchanges();
         } catch (e) {
@@ -23,7 +25,8 @@ class NewExchangeView extends ExchangesView {
         try {
             const amount = parseInt(this.state.amount);
             const extraAmount = Math.max(0, amount - this.state.balance);
-            await this.props.contract.methods.exchange(amount.toString()).send({value: extraAmount.toString()});
+            const contract = await getEURExchangeContract();
+            await contract.methods.exchange(amount.toString()).send({value: extraAmount.toString()});
             await this.loadExchanges();
         } catch (e) {
             console.error(e);

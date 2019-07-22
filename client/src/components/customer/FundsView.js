@@ -2,27 +2,30 @@ import React, { Component } from 'react';
 import {Button, Grid, Icon} from "semantic-ui-react";
 import ConfigurationField from "../owner/ConfigurationField";
 import getWeb3 from "../../utils/getWeb3";
+import { getEURExchangeContract } from "../../utils/contracts"
+
 
 
 class FundsView extends Component {
     state = {balance: '', funds: '', web3: null};
 
     refreshBalance = async () => {
-        const balance = await this.props.contract.methods.getBalance().call();
-        const balanceETH = this.state.web3.utils.fromWei(balance.toString(), 'ether');
+        const web3 = await getWeb3();
+        const contract = await getEURExchangeContract();
+        const balance = await contract.methods.getBalance().call();
+        const balanceETH = web3.utils.fromWei(balance.toString(), 'ether');
         this.setState({balance: balanceETH});
     };
 
     componentDidMount = async () => {
-        const web3 = await getWeb3();
-        this.setState({web3});
         await this.refreshBalance();
     };
 
 
     sendFunds = async () => {
         try {
-            await this.props.contract.methods.deposit().send({value: this.state.funds});
+            const contract = await getEURExchangeContract();
+            await contract.methods.deposit().send({value: this.state.funds});
             await this.refreshBalance();
         } catch (e) {
             console.error(e);
@@ -31,7 +34,8 @@ class FundsView extends Component {
 
     collectFunds = async () => {
         try {
-            await this.props.contract.methods.withdraw().send();
+            const contract = await getEURExchangeContract();
+            await contract.methods.withdraw().send();
             await this.refreshBalance();
         } catch (e) {
             console.error(e);

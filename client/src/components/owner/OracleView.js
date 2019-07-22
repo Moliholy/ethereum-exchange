@@ -2,24 +2,23 @@ import { Button, Grid, Header, Icon } from "semantic-ui-react";
 import React, { Component } from 'react';
 import ConfigurationField from "./ConfigurationField";
 import getWeb3 from "../../utils/getWeb3";
-import EUROracle from "../../contracts/EUROracle";
+import { getEUROracleContract } from "../../utils/contracts";
 
 
 class OracleView extends Component {
-    state = {rate: '', manualRate: '', oracleContract: null};
+    state = {rate: '', manualRate: ''};
 
     updateOracleRate = async () => {
         try {
-            const {oracleContract} = this.state;
-            oracleContract.once('RateUpdated', {}, async (error, event) => {
+            const contract = await getEUROracleContract();
+            contract.once('RateUpdated', {}, async error => {
                 if (error) {
                     console.error(error);
                     return;
                 }
-                console.log(event);
                 await this.refreshRate();
             });
-            await oracleContract.methods.update().send();
+            await contract.methods.update().send();
         } catch (e) {
             console.error(e);
         }
@@ -27,9 +26,10 @@ class OracleView extends Component {
 
     setOracleRate = async () => {
         try {
-            const {manualRate, oracleContract} = this.state;
+            const contract = await getEUROracleContract();
+            const {manualRate} = this.state;
             const newRate = Math.floor(parseFloat(manualRate) * 100).toString();
-            await oracleContract.methods.setRateRaw(newRate).send();
+            await contract.methods.setRateRaw(newRate).send();
             this.setState({manualRate: ''});
             await this.refreshRate();
         } catch (e) {
@@ -42,30 +42,24 @@ class OracleView extends Component {
             const web3 = await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const from = accounts[0];
-            const to = this.state.oracleContract.address;
+            const contract = await getEUROracleContract();
+            const to = contract.address;
             const value = web3.utils.toWei('0.1', "ether");
             web3.eth.sendTransaction({from, to, value, gas: 200000});
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
     refreshRate = async () => {
-        const contractRate = await this.state.oracleContract.methods.EUR().call();
+        const contract = await getEUROracleContract();
+        const contractRate = await contract.methods.EUR().call();
         const rate = contractRate.toNumber() / 100;
         this.setState({rate});
     };
 
     componentDidMount = async () => {
         try {
-            const web3 = await getWeb3();
-            const networkId = await web3.eth.net.getId();
-            const deployedNetwork = EUROracle.networks[networkId];
-            const oracleContract = new web3.eth.Contract(
-                EUROracle.abi,
-                deployedNetwork && deployedNetwork.address,
-            );
-            this.setState({oracleContract});
             await this.refreshRate();
         } catch (e) {
             console.error(e);

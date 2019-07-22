@@ -18,18 +18,17 @@ class OwnerView extends MainView {
     }
 
     renderSelectedComponent = () => {
-        const contract = this.props.contract;
         switch (this.state.activeItem) {
             case 'collect':
-                return <CollectView contract={contract}/>;
+                return <CollectView/>;
             case 'exchanges':
-                return <ExchangesView contract={contract}/>;
+                return <ExchangesView/>;
             case 'authorizations':
-                return <AuthorizationsView contract={contract}/>;
+                return <AuthorizationsView/>;
             case 'oracle':
                 return <OracleView/>;
             case 'configuration':
-                return <ConfigurationView contract={contract}/>;
+                return <ConfigurationView/>;
             default:
                 return <h1>Invalid selection</h1>;
         }

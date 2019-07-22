@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Header, Menu } from "semantic-ui-react";
+import { getEURExchangeContract } from "../utils/contracts"
+
 
 class AppHeader extends Component {
     state = {isAuthorized: null};
 
     componentDidMount = async () => {
-        const isAuthorized = await this.props.contract.methods.isAuthorized().call();
+        const contract = await getEURExchangeContract();
+        const isAuthorized = contract.methods.isAuthorized().call();
         this.setState({isAuthorized});
     };
 
