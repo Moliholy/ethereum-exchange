@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Header, List } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 import getWeb3 from "../utils/getWeb3";
 import { getEURExchangeContract } from "../utils/contracts";
 
@@ -40,53 +40,34 @@ class ExchangesView extends Component {
         return this.state.exchanges.map((exchange, index) => {
             const {customer, amountWei, rawAmount, finalAmount, block} = exchange;
             return (
-                <List.Item key={index}>
-                    <List.Content>
-                        <Grid divided stackable>
-                            <Grid.Column width={6}>
-                                {customer}
-                            </Grid.Column>
-                            <Grid.Column width={2}>
-                                {amountWei} ETH
-                            </Grid.Column>
-                            <Grid.Column width={2}>
-                                {rawAmount}€
-                            </Grid.Column>
-                            <Grid.Column width={2}>
-                                {finalAmount}€
-                            </Grid.Column>
-                            <Grid.Column width={2}>
-                                {block}
-                            </Grid.Column>
-                        </Grid>
-                    </List.Content>
-                </List.Item>
+                <Table.Row key={index}>
+                    <Table.Cell>{customer}</Table.Cell>
+                    <Table.Cell>{amountWei} ETH</Table.Cell>
+                    <Table.Cell>{rawAmount}€</Table.Cell>
+                    <Table.Cell>{finalAmount}€</Table.Cell>
+                    <Table.Cell>{block}</Table.Cell>
+                </Table.Row>
             );
         });
     };
 
     render() {
         return (
-            <List divided selection verticalAlign='middle'>
-                <Grid divided stackable>
-                    <Grid.Column width={6}>
-                        <Header>Customer</Header>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Header>Amount in ETH</Header>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Header>Raw EUR</Header>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Header>Exchanged EUR</Header>
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Header>Block</Header>
-                    </Grid.Column>
-                </Grid>
-                {this.renderExchangeRequests()}
-            </List>
+            <Table celled>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Customer</Table.HeaderCell>
+                        <Table.HeaderCell>Amount in ETH</Table.HeaderCell>
+                        <Table.HeaderCell>Raw EUR</Table.HeaderCell>
+                        <Table.HeaderCell>Exchanged EUR</Table.HeaderCell>
+                        <Table.HeaderCell>Block</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+
+                <Table.Body>
+                    {this.renderExchangeRequests()}
+                </Table.Body>
+            </Table>
         );
     }
 }

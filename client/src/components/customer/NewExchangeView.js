@@ -36,14 +36,13 @@ class NewExchangeView extends ExchangesView {
     render() {
         return (
             <div>
-                <ConfigurationField placeholder={'New exchange'}
+                <ConfigurationField placeholder={'Amount'}
                                     onChange={event => this.setState({amount: event.target.value})}
                                     label={'New exchange'}
                                     type={'number'}
                                     buttonTitle={'Create'}
                                     onClick={this.newExchange}
                                     defaultValue={this.state.amount}/>
-                <br/>
                 <br/>
                 <br/>
                 {super.render()}
