@@ -24,7 +24,8 @@ class ExchangesView extends Component {
                 customer,
                 amountWei: web3.utils.fromWei(amountWei.toString(), 'ether'),
                 rawAmount: (rawAmountCents.toNumber() / 100).toString(),
-                finalAmount: (finalAmountCents.toNumber() / 100).toString()
+                finalAmount: (finalAmountCents.toNumber() / 100).toString(),
+                block: event.blockNumber
             });
         });
         exchanges.reverse();
@@ -37,12 +38,12 @@ class ExchangesView extends Component {
 
     renderExchangeRequests = () => {
         return this.state.exchanges.map((exchange, index) => {
-            const {customer, amountWei, rawAmount, finalAmount} = exchange;
+            const {customer, amountWei, rawAmount, finalAmount, block} = exchange;
             return (
                 <List.Item key={index}>
                     <List.Content>
                         <Grid divided stackable>
-                            <Grid.Column width={8}>
+                            <Grid.Column width={6}>
                                 {customer}
                             </Grid.Column>
                             <Grid.Column width={2}>
@@ -53,6 +54,9 @@ class ExchangesView extends Component {
                             </Grid.Column>
                             <Grid.Column width={2}>
                                 {finalAmount}€
+                            </Grid.Column>
+                            <Grid.Column width={2}>
+                                {block}
                             </Grid.Column>
                         </Grid>
                     </List.Content>
@@ -65,7 +69,7 @@ class ExchangesView extends Component {
         return (
             <List divided selection verticalAlign='middle'>
                 <Grid divided stackable>
-                    <Grid.Column width={8}>
+                    <Grid.Column width={6}>
                         <Header>Customer</Header>
                     </Grid.Column>
                     <Grid.Column width={2}>
@@ -76,6 +80,9 @@ class ExchangesView extends Component {
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Header>Exchanged EUR</Header>
+                    </Grid.Column>
+                    <Grid.Column width={2}>
+                        <Header>Block</Header>
                     </Grid.Column>
                 </Grid>
                 {this.renderExchangeRequests()}
