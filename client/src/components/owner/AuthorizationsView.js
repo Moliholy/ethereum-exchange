@@ -62,7 +62,14 @@ class AuthorizationsView extends Component {
         const contract = await getEURExchangeContract();
         const pastEvents = await contract.getPastEvents("AuthorizationRequested", {fromBlock: 0});
         const authorizations = [];
-        pastEvents.forEach(event => authorizations.push({address: event.returnValues.customer, authorized: false}));
+        const cache = {};
+        pastEvents.forEach(event => {
+            const address = event.returnValues.customer;
+            if (!cache[address]) {
+                cache[address] = true;
+                authorizations.push({address, authorized: false});
+            }
+        });
         authorizations.reverse();  // chronological order
         this.setState({authorizations});
         await this.refreshAuthorizationStatuses();
