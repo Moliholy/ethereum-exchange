@@ -97,10 +97,10 @@ class AuthorizationsView extends Component {
                 </Button>
             );
         };
-        return this.state.authorizations.map((authorization, index) => {
+        return this.state.authorizations.map(authorization => {
             const {address, authorized} = authorization;
             return (
-                <List.Item key={index}>
+                <List.Item key={address}>
                     <Image size={'tiny'} src={authorized ? logoOK : logoKO} style={{width: 25, height: 25}}/>
                     <List.Content>
                         <Header>{address}</Header>

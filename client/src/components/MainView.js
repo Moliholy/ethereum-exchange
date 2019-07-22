@@ -27,6 +27,7 @@ class MainView extends Component {
             return (
                 <Menu.Item
                     name={item}
+                    key={item}
                     active={this.state.activeItem === item}
                     onClick={this.handleItemClick}
                 />
