@@ -75,7 +75,7 @@ class ConfigurationView extends Component {
                 <Grid.Column width={5}>
                     <ConfigurationField placeholder={'Fee'}
                                         onChange={event => this.setState({fee: event.target.value})}
-                                        label={'Fee percentage'}
+                                        label={'Fee %'}
                                         type={'number'}
                                         onClick={this.setFee}
                                         defaultValue={fee}/>
