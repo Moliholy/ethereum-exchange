@@ -1,27 +1,82 @@
 # ETH -> EUR Exchange
 
+This repository contains an ethereum DApp whose target is to offer to exchange ETH for EUR in a seamless way.
+All operations are performed through the main smart contract, and it also includes a web frontend made with React.
 
-# Oráculo
 
-El sistema usa un [oráculo](ethereum/contracts/EUROracle.sol) que da la tasa de cambio ETH->EUR y viceversa.
-Para su implementación se ha hecho uso de [oraclize](https://docs.provable.xyz/), de forma que se emite un evento que
-es capturado por esta empresa, y ejecuta la llamada remota a una URL data y extrae del JSON de respuesta el elemento
-que simboliza la tasa de cambio. Una vez conseguido dicho elemento ejecuta la función del
- contrato ``__callback(bytes32,string)``, en la cual se obtiene el resultado y se parsea el número en céntimos de Euro.
- 
-Lamentablemente no es posible probar esta funcionalidad en Ganache, por lo que he realizado pruebas en la testnet
-de Rinkeby. [Aquí](https://rinkeby.etherscan.io/address/0xb13705ee03f946ac37a1578234017f555fc1f8bb) podemos ver todas
-las transacciones del contrato, y resultan particularmente interesantes las siguientes:
 
-- [Transacción](https://rinkeby.etherscan.io/tx/0x72a2f30d2a8b14fede0f55f07c2d0b6e34a94efe4500438ce803c07dbcf03c51) de
-solicitud de oraclize a Provable para acceder a la URL.
-- [Transacción](https://rinkeby.etherscan.io/tx/0x28a9afa7e2844c2e0fafa39c6a7204329612db4ba7a5b9f2f072ce2c6ee798b0) de
-vuelta que ejecuta la función ``__callback``.
+## Table of contents
 
-Es interesante mencionar que el contrato está disponible en ``EthPM`` bajo el nombre de ``oraclize-api``. Sin embargo
-dicho contrato está preparado para ser compilado con una versión de solidity bastante inferior a la usada. Es por ello
-que finalmente se ha decidido copiar el contrato [UsingOraclize.sol](ethereum/contracts/UsingOraclize.sol). En caso contrario
-sencillamente se habrían declarado las dependencias en ``ethpm.json`` de la siguiente manera:
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Components](#components)
+    - [Oracle](#oracle)
+    - [Exchange](#exchange)
+- [Libraries](#libraries)
+- [Testing](#testing)
+
+
+
+## Requirements
+
+- `truffle`
+- `node`
+
+
+
+## Setup
+
+It will be necessary to open three terminals in `./ethereum`:
+
+Install the dependencies:
+
+```bash
+$ npm install
+```
+
+Launch the testing blockchain in port 7545:
+
+```bash
+$ truffle develop
+```
+
+Launch the oracle service:
+
+```bash
+$ npm run bridge
+```
+
+Compile and migrate the contracts in the testnet:
+
+```bash
+$ npm run migrate
+```
+
+To start the frontend project:
+
+```bash
+$ cd ./client
+$ npm install
+$ npm run start
+```
+
+
+
+## Components
+
+
+### Oracle
+
+The system uses an [oracle](ethereum/contracts/EUROracle.sol) that provides the ETH->EUR exchange rate.
+Its implementation uses [oraclize](https://docs.provable.xyz/) so that each time a query is performed an event is
+broadcasted and captured by that company, who executes the URL call and extract the correct value from the response.
+Once the data has been retrieved it calls the contract's ``__callback(bytes32,string)`` function, which parses the
+result and sets the number of euro cents worth one ether.
+
+It's worth mentioning that right now the available version of the contracts in EthPM is valid for solidity 0.4, but
+this project uses the version 0.5, which made impossible to use EthPM to fetch the contract. Instead, they have been
+directly imported from github through [package.json](./ethereum/package.json). Once the EthPM repository gets updated
+it will be necessary to update the [ethpm.json](./ethereum/ethpm.json) file like this:
 
 ```json
 {
@@ -33,6 +88,54 @@ sencillamente se habrían declarado las dependencias en ``ethpm.json`` de la sig
 }
 ```
 
-Tras ello hubiese bastado con ejecutar ``truffle install`` para crear el directorio `installed_contracts/` y así poder 
-directamente usar el contrato.
+### Exchange
 
+This contract actually performs exchange operations. It is composed of owner and customer sections:
+
+#### Functionality for owner
+
+- Grant and deny authorizations to use the service.
+- Emergency stop to block all non-owner public functions.
+- Collect earnings.
+- Set the fee.
+- Set the oracle address.
+- Set the minimum amount to be traded.
+- Transfer ownership.
+
+#### Functionality for customers
+
+- Request authorization to the owner.
+- Deposit funds in the contract to be exchanged at a later moment.
+- Exchange ETH for EUR.
+- Withdraw previously deposited amounts.
+- Check what is the current raw and final amount in EUR given the amount of ETH to trade.
+- Check the current deposited balance.
+- Check whether the customer is authorized to use the service or not.
+ 
+
+
+## Libraries
+
+This project uses two libraries:
+
+- [usingOraclize](https://github.com/provable-things/ethereum-api/blob/master/oraclizeAPI_0.5.sol) from Provable API.
+- [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts)'s `SafeMath` and `Ownable`. 
+
+
+## Testing
+
+Firstly open the truffle testnet blockchain and oracle service:
+
+```bash
+$ truffle develop 
+```
+
+```bash
+$ npm run bridge
+```
+
+Once deployed simply run the following in the truffle console:
+
+```
+truffle(develop)> test
+```
