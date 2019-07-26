@@ -17,6 +17,7 @@ All operations are performed through the main smart contract, and it also includ
 - [Testnet](#testnet)
 - [ENS](#ens)
 - [Security concerns](#security-concerns)
+- [Upgrade patterns](#upgrade-patterns)
 
 
 
@@ -215,3 +216,12 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 | Unitialized storage pointers    | `memoery` and `storage` explicitly set                       |
 | Floating points precision       | Numerators are large enough                                  |
 | Tx.origin authentication        | `tx.origin` is not used at all                               |
+
+
+## Upgrade patterns
+
+The following measures could have been implemented:
+
+- Leave a contract only for storage, and others only with the logic so that it is unlikely to heave to migrate the data.
+- Some libraries could have been used to encapsulate the logic.
+- Communication between the exchanger and the oracle could have been made using an interface to abstract implementation details.
