@@ -14,6 +14,7 @@ All operations are performed through the main smart contract, and it also includ
     - [Exchange](#exchange)
 - [Libraries](#libraries)
 - [Testing](#testing)
+- [Testnet](#testnet)
 
 
 
@@ -139,3 +140,9 @@ Once deployed simply run the following in the truffle console:
 ```
 truffle(develop)> test
 ```
+
+
+## Testnet
+
+The main contract is deployed in [rinkeby](https://rinkeby.etherscan.io/address/0x08E53CE9ff69f56E6B033c644e851767fb4032c6).
+Feel free to interact with it or deploy your own.
