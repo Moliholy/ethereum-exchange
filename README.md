@@ -195,3 +195,23 @@ This contract's address (`0x08e53ce9ff69f56e6b033c644e851767fb4032c6`) has been 
 
 ## Security concerns
 
+By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the following security measures have been taken:
+
+| Vulnerability                   | Solution                                                     |
+| -----------------------------   | ------------------------------------------------------------ |
+| Re-entrancy                     | Always update the state first, and lastly transfer ether     |
+| Arithmetic over/under flows     | Use the SafeMath library                                     |
+| Unexpected ether                | Not applicable                                               |
+| Delegate call                   | Not used                                                     |
+| Default visibilities            | Not allowed by the compiler since 0.5.0                      |
+| Entropy illusion                | Logic does not depend on entropy                             |
+| External contract referencing   | Oracle contract is deployed and set by truffle directly      |
+| Short address/parameter attack  | Input is validated                                           |
+| Unchecked CALL return values    | Only `transfer` is used                                      |
+| Race conditions / Front running | No common resources to attack                                |
+| Denial of Service (DOS)         | Oracle can set the price by itself. There are no loops       |
+| Block timestamp manipulation    | `now` is not used                                            |
+| Constructors with care          | Using solidity 0.5 with `constructor()` syntax               |
+| Unitialized storage pointers    | `memoery` and `storage` explicitly set                       |
+| Floating points precision       | Numerators are large enough                                  |
+| Tx.origin authentication        | `tx.origin` is not used at all                               |
