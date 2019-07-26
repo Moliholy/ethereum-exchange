@@ -8,7 +8,7 @@ class AppHeader extends Component {
 
     componentDidMount = async () => {
         const contract = await getEURExchangeContract();
-        const isAuthorized = contract.methods.isAuthorized().call();
+        const isAuthorized = await contract.methods.isAuthorized().call();
         this.setState({isAuthorized});
     };
 

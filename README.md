@@ -179,5 +179,5 @@ $ npm run build
 $ ipfs add -r client/build
 ```
 
-After that simply access http://127.0.0.1:8080/ipfs/QmVVgvxsTku2iTMVyuUSQntmBTNLSMmvqtCzppGCWSjCx9/ and you can
+After that simply access http://127.0.0.1:8080/ipfs/QmX9aeCWZWxSsxDVBavd5yNKbZKRqsnwJYEoWTFS7khHhJ/ and you can
 start interacting with the DApp.
