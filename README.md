@@ -15,6 +15,8 @@ All operations are performed through the main smart contract, and it also includ
 - [Libraries](#libraries)
 - [Testing](#testing)
 - [Testnet](#testnet)
+- [ENS](#ens)
+- [Security concerns](#security-concerns)
 
 
 
@@ -189,3 +191,7 @@ start interacting with the DApp.
 This contract's address (`0x08e53ce9ff69f56e6b033c644e851767fb4032c6`) has been registered under the name of
 ``eurexchange.test`` in Rinkeby, as shown in this
 [transaction](https://rinkeby.etherscan.io/tx/0x59d7bdf0b3f247218ee54be55d696797d8b72f96635f43eb8b69215dff575dad).
+
+
+## Security concerns
+

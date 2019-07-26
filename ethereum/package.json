@@ -9,11 +9,13 @@
   "devDependencies": {
     "ethereum-bridge": "^0.6.2",
     "remixd": "^0.1.8-alpha.6",
-    "truffle-assertions": "^0.9.1"
+    "truffle-assertions": "^0.9.1",
+    "ethlint": "^1.2.4"
   },
   "scripts": {
     "bridge": "ethereum-bridge -H localhost:7545 -a 9 --dev",
     "remix": "remixd -s . --remix-ide https://remix.ethereum.org",
-    "migrate": "rm -rf build/ && truffle migrate"
+    "migrate": "rm -rf build/ && truffle migrate",
+    "lint": "solium -d contracts"
   }
 }
