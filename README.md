@@ -144,7 +144,8 @@ truffle(develop)> test
 
 ## Testnet
 
-The main contract is deployed in [rinkeby](https://rinkeby.etherscan.io/address/0x08E53CE9ff69f56E6B033c644e851767fb4032c6).
+The main contract is deployed in [rinkeby](https://rinkeby.etherscan.io/address/0x08E53CE9ff69f56E6B033c644e851767fb4032c6)
+with the address ``0x08e53ce9ff69f56e6b033c644e851767fb4032c6``.
 Feel free to interact with it or deploy your own.
 
 In order to verify it on Etherscan it has been necessary to install [solpp](https://github.com/merklejerk/solpp). Later simply running
@@ -181,3 +182,10 @@ $ ipfs add -r client/build
 
 After that simply access http://127.0.0.1:8080/ipfs/QmX9aeCWZWxSsxDVBavd5yNKbZKRqsnwJYEoWTFS7khHhJ/ and you can
 start interacting with the DApp.
+
+
+## ENS
+
+This contract's address (`0x08e53ce9ff69f56e6b033c644e851767fb4032c6`) has been registered under the name of
+``eurexchange.test`` in Rinkeby, as shown in this
+[transaction](https://rinkeby.etherscan.io/tx/0x59d7bdf0b3f247218ee54be55d696797d8b72f96635f43eb8b69215dff575dad).
