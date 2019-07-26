@@ -218,6 +218,9 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 | Tx.origin authentication        | `tx.origin` is not used at all                               |
 
 
+It is also worth mentioning that the ``EURExchange`` contract inherits from `Stoppable`, which
+implements a mechanism to stop the functionality in case of failure.
+
 ## Upgrade patterns
 
 The following measures could have been implemented:
