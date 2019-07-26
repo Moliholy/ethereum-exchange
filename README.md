@@ -146,3 +146,38 @@ truffle(develop)> test
 
 The main contract is deployed in [rinkeby](https://rinkeby.etherscan.io/address/0x08E53CE9ff69f56E6B033c644e851767fb4032c6).
 Feel free to interact with it or deploy your own.
+
+In order to verify it on Etherscan it has been necessary to install [solpp](https://github.com/merklejerk/solpp). Later simply running
+
+```bash
+$ solpp --output flattened.sol contracts/EURExchange.sol
+```
+
+provides the full flattened version of the contract. Afterwards simply select whether there is optimization or not, and 
+the compiler version. I recommend selecting the single file option to verify it.
+
+### Host in IPFS
+
+The frontend can be hosted in IPFS. In order to do so follow these steps:
+
+- Run the daemon:
+
+```bash
+$ ipfs daemon
+```
+
+- Generate the client's production build:
+
+```bash
+$ cd client
+$ npm run build
+```
+
+- Add the files to IPFS:
+
+```bash
+$ ipfs add -r client/build
+```
+
+After that simply access http://127.0.0.1:8080/ipfs/QmR2X62zeKzNqUEKbZEDwJUiZDhkuuejQA8TgLTc8GXRbx/ and you can
+start interacting with the DApp.
