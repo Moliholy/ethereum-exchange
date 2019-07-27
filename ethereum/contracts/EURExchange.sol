@@ -163,7 +163,7 @@ contract EURExchange is Stoppable
       authorized
       stopInEmergency
     {
-        require(msg.value > 0);
+        require(msg.value > 0, "Sent amount must be greater than zero");
 
         balances[msg.sender] += msg.value;
         emit DepositPerformed(msg.sender, msg.value, getBalance());

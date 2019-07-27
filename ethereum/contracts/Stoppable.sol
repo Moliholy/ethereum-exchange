@@ -12,10 +12,6 @@ contract Stoppable is Ownable
         _;
     }
 
-    constructor() Ownable()
-      public
-    {}
-
     function toggleContractActive()
       external
       onlyOwner

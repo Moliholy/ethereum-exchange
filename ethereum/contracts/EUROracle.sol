@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "ethereum-api/oraclizeAPI_0.5.sol";
 
-/** 
+/**
  *  @title Oracle to get ETH->EUR and EUR->ETH rates.
  *  @author José Molina Colmenero
  *  @notice Rates are not guaranteed to be up to date.
@@ -23,7 +23,7 @@ contract EUROracle is usingOraclize, Ownable
 
 
     /////////// Owner-only functions ///////////
-    
+
     /**
      * @notice Creates a new contract. It is possible to pre-load the contract with ether.
      *         Provable API will be called upon creation to set the prices. The first
@@ -62,7 +62,7 @@ contract EUROracle is usingOraclize, Ownable
     {
         setRate(_rate);
     }
-    
+
     /**
      * @notice Manually set the query in case the service is off.
      * @param _query string that represents URL and operations to perform in order to get the exchange rate.
@@ -74,10 +74,10 @@ contract EUROracle is usingOraclize, Ownable
     {
         query = _query;
     }
-    
-    
+
+
     /////////// Private and internal functions ///////////
-    
+
     /**
      * @notice To set the exchange rate and update the timer.
      * @param _rate the ETH->EUR exchange rate.
@@ -86,13 +86,13 @@ contract EUROracle is usingOraclize, Ownable
       internal
     {
         rate = _rate;
-        lastUpdated = now;
+        lastUpdated = block.number;
         emit RateUpdated(rate);
     }
-    
-    
+
+
     /////////// Public and external functions ///////////
-    
+
     /**
      * @notice Callback function to be invoked by Provable in order to set the ETH->EUR exchange rate.
      * @param _id ID of the last request to Provable.
@@ -103,11 +103,11 @@ contract EUROracle is usingOraclize, Ownable
     {
         require(msg.sender == oraclize_cbAddress(), "This address can not perform this operation");
         require(_id == lastCallId, "This call ID does not correspond to the last requested one");
-        
+
         uint newRate = parseInt(_result, 2);
         setRate(newRate);
     }
-    
+
     /**
      * @notice Log the amount sent to the contract, if any.
      * @dev this function must be private as it's used internally only.
@@ -132,7 +132,7 @@ contract EUROracle is usingOraclize, Ownable
     {
         return rate;
     }
-    
+
     /**
      * @notice Returns 1 EUR in WEI.
      * @return the number of weis worth one EUR.
@@ -144,7 +144,7 @@ contract EUROracle is usingOraclize, Ownable
     {
         return 1 ether / rate;
     }
-      
+
     /**
      * @notice Used to refill the oracle by sending ether.
      */
