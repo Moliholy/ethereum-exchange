@@ -201,7 +201,7 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 | Vulnerability                   | Solution                                                     |
 | -----------------------------   | ------------------------------------------------------------ |
 | Re-entrancy                     | Always update the state first, and lastly transfer ether     |
-| Arithmetic over/under flows     | Use the SafeMath library                                     |
+| Arithmetic over/under flows     | Use SafeMath library                                     |
 | Unexpected ether                | Not applicable                                               |
 | Delegate call                   | Not used                                                     |
 | Default visibilities            | Not allowed by the compiler since 0.5.0                      |
@@ -220,6 +220,14 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 
 It is also worth mentioning that the ``EURExchange`` contract inherits from `Stoppable`, which
 implements a mechanism to stop the functionality in case of failure.
+
+Lastly, this contract uses [Ethlint](https://github.com/duaraghav8/Ethlint) in order to improve code readability
+and enforce security patterns. This tool can be run via the following command:
+ 
+```bash
+$ npm run lint
+```
+
 
 ## Upgrade patterns
 
