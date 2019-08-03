@@ -44,6 +44,13 @@ Launch the testing blockchain in port 7545:
 $ truffle develop
 ```
 
+In order to interact with the frontend it will also be necessary to configure Metamask so that it uses
+the addresses that have just been generated. In order to do so log out from Metamask if there was an ongoing
+session, and create a new one by copy and pasting the seed displayed by the previous command. Once that is done,
+it is worth noticing that the first address corresponds to the ``owner``, the 10th one is used by Provable's
+bridge, and the rest correspond to ``customers``.
+
+
 Launch the oracle service:
 
 ```bash
@@ -65,7 +72,6 @@ $ npm run start
 ```
 
 
-
 ## Components
 
 
@@ -75,7 +81,11 @@ The system uses an [oracle](ethereum/contracts/EUROracle.sol) that provides the 
 Its implementation uses [oraclize](https://docs.provable.xyz/) so that each time a query is performed an event is
 broadcasted and captured by that company, who executes the URL call and extract the correct value from the response.
 Once the data has been retrieved it calls the contract's ``__callback(bytes32,string)`` function, which parses the
-result and sets the number of euro cents worth one ether.
+result and sets the number of euro cents worth one ether. Whenever the contract is deployed it immediately executes the
+logic to update the price using this mechanism, which has however been proved to cost a lot of gas and made
+the deployment process harder. This also severely complicated testing the oracle, as it is necessary to have
+Provable's bridge enabled. A different solution could have been to directly set the price in a manual way so
+that the expensive call to Provable is delayed.
 
 It's worth mentioning that right now the available version of the contracts in EthPM is valid for solidity 0.4, but
 this project uses the version 0.5, which made impossible to use EthPM to fetch the contract. Instead, they have been
@@ -116,6 +126,9 @@ This contract actually performs exchange operations. It is composed of owner and
 - Check the current deposited balance.
 - Check whether the customer is authorized to use the service or not.
  
+
+A user can play the role of the `owner` by selecting the first address in Metamask, or a `customer` using any other
+available address.
 
 
 ## Libraries
@@ -201,7 +214,7 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 | Vulnerability                   | Solution                                                     |
 | -----------------------------   | ------------------------------------------------------------ |
 | Re-entrancy                     | Always update the state first, and lastly transfer ether     |
-| Arithmetic over/under flows     | Use SafeMath library                                     |
+| Arithmetic over/under flows     | Use `SafeMath` library                                       |
 | Unexpected ether                | Not applicable                                               |
 | Delegate call                   | Not used                                                     |
 | Default visibilities            | Not allowed by the compiler since 0.5.0                      |
@@ -213,7 +226,7 @@ By using [this guide](https://blog.sigmaprime.io/solidity-security.html) the fol
 | Denial of Service (DOS)         | Oracle can set the price by itself. There are no loops       |
 | Block timestamp manipulation    | `now` is not used                                            |
 | Constructors with care          | Using solidity 0.5 with `constructor()` syntax               |
-| Unitialized storage pointers    | `memoery` and `storage` explicitly set                       |
+| Unitialized storage pointers    | `memory` and `storage` explicitly set                        |
 | Floating points precision       | Numerators are large enough                                  |
 | Tx.origin authentication        | `tx.origin` is not used at all                               |
 
