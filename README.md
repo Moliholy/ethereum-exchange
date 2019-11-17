@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Moliholy/ethereum-exchange.svg?branch=master)](https://travis-ci.org/Moliholy/ethereum-exchange)
+
 # ETH -> EUR Exchange
 
 
