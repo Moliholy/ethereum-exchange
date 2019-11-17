@@ -10,12 +10,16 @@
     "ethereum-bridge": "^0.6.2",
     "remixd": "^0.1.8-alpha.6",
     "truffle-assertions": "^0.9.1",
-    "ethlint": "^1.2.4"
+    "ethlint": "^1.2.4",
+    "truffle": "^5.1.0",
+    "ganache-cli": "^6.7.0"
   },
   "scripts": {
+    "ganache": "ganache-cli -p 7545",
     "bridge": "ethereum-bridge -H localhost:7545 -a 9 --dev",
     "remix": "remixd -s . --remix-ide https://remix.ethereum.org",
     "migrate": "rm -rf build/ && truffle migrate",
-    "lint": "solium -d contracts"
+    "lint": "solium -d contracts",
+    "test": "truffle test"
   }
 }

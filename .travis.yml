@@ -1,0 +1,33 @@
+language: node_js
+
+sudo: required
+
+node_js:
+  - "8.16.2"
+
+env:
+  - CXX=g++-4.8
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - build-essential
+      - g++-4.8
+
+before_install:
+  - export CXX="g++-4.8"
+  - npm install -g yarn
+
+install:
+  - cd ethereum && yarn install
+
+script:
+  - yarn run ganache &
+  - sleep 5
+  - yarn run bridge &
+  - sleep 10
+  - yarn run migrate
+  - yarn run test
+  - yarn run lint
